@@ -14,6 +14,7 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { ISwaggerConfig } from './swagger/interface';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 export class ConfigService {
   constructor() {
@@ -35,7 +36,12 @@ export class ConfigService {
   }
 
   public getBoolean(key: string): boolean {
-    return JSON.parse(this.get(key));
+    try {
+      return JSON.parse(this.get(key));
+    } catch (err) {
+      console.log('Error: ', err.message);
+      return false;
+    }
   }
 
   get env(): string {
@@ -62,7 +68,7 @@ export class ConfigService {
       synchronize: this.getBoolean('DATABASE_SYNCHRONIZE'),
       entities: [__dirname + '/../**/*.entity.js'],
       namingStrategy: new SnakeNamingStrategy(),
-      keepConnectionAlive: true,
+      // keepConnectionAlive: true,
       logging: ['error'],
       timezone: '+09:00',
     };
