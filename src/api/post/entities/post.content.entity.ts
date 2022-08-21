@@ -28,6 +28,6 @@ export class PostContent {
   updatedAt: Date;
 
   @ManyToOne(() => Post, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: 'id', referencedColumnName: 'postId' })
+  @JoinColumn({ name: 'postId', referencedColumnName: 'postId' })
   postId: Post;
 }

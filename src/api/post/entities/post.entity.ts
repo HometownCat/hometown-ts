@@ -1,3 +1,5 @@
+import { PostLike } from './post.like.entity';
+import { PostComment } from './post.comment.entity';
 import { PostContent } from './post.content.entity';
 import {
   Column,
@@ -10,7 +12,7 @@ import {
 
 @Entity({ name: 'post' })
 export class Post {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'postId' })
   id: number;
 
   @Column({ type: 'text', name: 'title', nullable: false })
@@ -27,5 +29,11 @@ export class Post {
   updatedAt: Date;
 
   @OneToMany(() => PostContent, (postContents) => postContents.postId)
-  PostContent: PostContent;
+  postContent: PostContent;
+
+  @OneToMany(() => PostComment, (postComments) => postComments.postId)
+  postComment: PostComment;
+
+  @OneToMany(() => PostLike, (postLikes) => postLikes.postId)
+  postLike: PostLike;
 }

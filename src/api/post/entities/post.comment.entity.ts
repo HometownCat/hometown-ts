@@ -10,7 +10,7 @@ import {
 import { Post } from './post.entity';
 
 @Entity({ name: 'postComment' })
-export class postComment {
+export class PostComment {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,6 +28,6 @@ export class postComment {
   updatedAt: Date;
 
   @ManyToOne(() => Post, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: 'id', referencedColumnName: 'postId' })
+  @JoinColumn({ name: 'postId', referencedColumnName: 'postId' })
   postId: Post;
 }
