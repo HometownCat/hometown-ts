@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,17 +18,15 @@ export class PostComment {
   @Column({ type: 'text', name: 'comment', nullable: false })
   comment: string;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    default: null,
-  })
+  @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', default: null })
   updatedAt: Date;
 
-  @ManyToOne(() => Post, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: 'postId', referencedColumnName: 'postId' })
-  postId: Post;
+  @ManyToOne(() => Post, {
+    createForeignKeyConstraints: false,
+  })
+  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
+  post: Post;
 }

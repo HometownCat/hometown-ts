@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,17 +18,13 @@ export class PostLike {
   @Column({ type: 'tinyint', default: 0, name: 'like', nullable: false })
   like: string;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    default: null,
-  })
+  @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', default: null })
   updatedAt: Date;
 
-  @ManyToOne(() => Post, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: 'postId', referencedColumnName: 'postId' })
-  postId: Post;
+  @OneToOne(() => Post, { createForeignKeyConstraints: false })
+  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
+  post: Post;
 }
