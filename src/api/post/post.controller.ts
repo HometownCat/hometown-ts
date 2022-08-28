@@ -6,7 +6,7 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Get()
+  @Get('/all')
   @HttpCode(200)
   async findAll(): Promise<Post[]> {
     const posts = await this.postService.findAll();

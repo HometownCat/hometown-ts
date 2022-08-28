@@ -1,4 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { async } from 'rxjs';
+import { User } from './user.entity';
+import { UserService } from './user.service';
 
 @Controller('user')
-export class UserController {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+  @Get('/login')
+  async login(): Promise<User[]> {
+    return await this.userService.findAll();
+  }
+}

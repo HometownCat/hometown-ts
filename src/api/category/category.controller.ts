@@ -5,7 +5,7 @@ import { Category } from './category.entity';
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
-  @Get()
+  @Get('/all')
   @HttpCode(200)
   async findAll(): Promise<Category[]> {
     const posts = await this.categoryService.findAll();
