@@ -14,6 +14,8 @@ import { ConfigService } from './config/config.service';
       useFactory: (configService: ConfigService) => configService.typeOrmConfig,
     }),
     UserModule,
+    PostModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
