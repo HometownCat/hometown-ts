@@ -20,8 +20,10 @@ export class PostImage {
 
   @Column({ type: 'text', name: 'jpeg', nullable: true })
   jpeg: string;
+
   @Column({ type: 'text', nullable: true })
   webp: string;
+
   @Column({ type: 'text', nullable: true })
   original: string;
 
@@ -49,10 +51,19 @@ export class PostImage {
   @Column({ type: 'tinyint', nullable: true })
   order: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    name: 'createdAt',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', default: null })
+  @Column({
+    type: 'timestamp',
+    name: 'updatedAt',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    default: null,
+  })
   updatedAt: Date;
 
   @ManyToOne(() => Post, {
