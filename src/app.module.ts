@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { PostModule } from './api/post/post.module';
+import { CategoryModule } from './api/category/category.module';
 
 @Module({
   imports: [
