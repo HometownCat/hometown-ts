@@ -20,39 +20,50 @@ export class PostImage {
 
   @Column({ type: 'text', name: 'jpeg', nullable: true })
   jpeg: string;
-  @Column({ type: 'text', nullable: true })
+
+  @Column({ type: 'text', name: 'webp', nullable: true })
   webp: string;
-  @Column({ type: 'text', nullable: true })
+
+  @Column({ type: 'text', name: 'original', nullable: true })
   original: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', name: 'jpegBucket', nullable: true })
   jpegBucket: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', name: 'webpBucket', nullable: true })
   webpBucket: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', name: 'originalBucket', nullable: true })
   originalBucket: string;
 
-  @Column({ type: 'mediumint', nullable: true })
+  @Column({ type: 'mediumint', name: 'width', nullable: true })
   width: number;
 
-  @Column({ type: 'mediumint', nullable: true })
+  @Column({ type: 'mediumint', name: 'height', nullable: true })
   heigth: number;
 
-  @Column({ type: 'mediumint', nullable: true })
+  @Column({ type: 'mediumint', name: 'filesizeJpeg', nullable: true })
   filesizeJpeg: number;
 
-  @Column({ type: 'mediumint', nullable: true })
+  @Column({ type: 'mediumint', name: 'filesizeWebp', nullable: true })
   filesizeWebp: number;
 
-  @Column({ type: 'tinyint', nullable: true })
+  @Column({ type: 'tinyint', name: 'order', nullable: true })
   order: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    name: 'createdAt',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', default: null })
+  @Column({
+    type: 'timestamp',
+    name: 'updatedAt',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    default: null,
+  })
   updatedAt: Date;
 
   @ManyToOne(() => Post, {

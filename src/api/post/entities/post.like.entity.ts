@@ -18,10 +18,19 @@ export class PostLike {
   @Column({ type: 'tinyint', default: 0, name: 'like', nullable: false })
   like: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    name: 'createdAt',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', onUpdate: 'CURRENT_TIMESTAMP', default: null })
+  @Column({
+    type: 'timestamp',
+    name: 'updatedAt',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    default: null,
+  })
   updatedAt: Date;
 
   @OneToOne(() => Post, { createForeignKeyConstraints: false })

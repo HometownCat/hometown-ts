@@ -13,24 +13,33 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', name: 'username', length: 20, nullable: false })
   username: string;
 
-  @Column()
+  @Column({ type: 'mediumtext', name: 'email', nullable: false })
   email: string;
 
-  @Column({ select: false })
+  @Column({ select: false, type: 'varchar', length: 20, nullable: false })
   password: string;
 
-  @Column()
+  @Column({ type: 'varchar', name: 'password', length: 20, nullable: false })
   userIp: string;
 
-  @Column()
+  @Column({ type: 'tinyint', name: 'status', nullable: false })
   status: number;
 
-  @CreateDateColumn()
+  @Column({
+    type: 'timestamp',
+    name: 'createdAt',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @Column({
+    type: 'timestamp',
+    name: 'updatedAt',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    default: null,
+  })
   updatedAt: Date;
 }
