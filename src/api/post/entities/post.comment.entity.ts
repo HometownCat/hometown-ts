@@ -12,7 +12,7 @@ import { Post } from './post.entity';
 
 @Entity({ name: 'postComment' })
 export class PostComment {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column({ type: 'text', name: 'comment', nullable: false })

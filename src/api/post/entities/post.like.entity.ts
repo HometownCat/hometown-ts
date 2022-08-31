@@ -12,7 +12,7 @@ import { Post } from './post.entity';
 
 @Entity({ name: 'postLike' })
 export class PostLike {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column({ type: 'tinyint', default: 0, name: 'like', nullable: false })

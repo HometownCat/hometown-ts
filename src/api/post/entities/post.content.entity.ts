@@ -13,7 +13,7 @@ import { Post } from './post.entity';
 
 @Entity({ name: 'postContent' })
 export class PostContent {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column({ type: 'longtext', nullable: false, name: 'content' })

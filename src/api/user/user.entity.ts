@@ -19,10 +19,16 @@ export class User {
   @Column({ type: 'mediumtext', name: 'email', nullable: false })
   email: string;
 
-  @Column({ select: false, type: 'varchar', length: 20, nullable: false })
+  @Column({
+    select: false,
+    type: 'varchar',
+    name: 'password',
+    length: 20,
+    nullable: false,
+  })
   password: string;
 
-  @Column({ type: 'varchar', name: 'password', length: 20, nullable: false })
+  @Column({ type: 'varchar', name: 'userIp', length: 20, nullable: false })
   userIp: string;
 
   @Column({ type: 'tinyint', name: 'status', nullable: false })

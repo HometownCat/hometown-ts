@@ -12,7 +12,7 @@ import { Post } from './post.entity';
 
 @Entity({ name: 'postImage' })
 export class PostImage {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column({ type: 'text', name: 'image', nullable: true })
