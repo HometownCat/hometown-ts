@@ -10,6 +10,13 @@ import { LoggerService } from './common/utils/logger/logger.service';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { setupSwagger } from './config/swagger/setup';
+import * as cookieParser from 'cookie-parser';
+import * as expressSession from 'express-session';
+import * as requestIp from 'request-ip';
+
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -28,6 +35,9 @@ async function bootstrap() {
 
   // Filter
   app.useGlobalFilters(new CatchException());
+
+  // client ip
+  app.use(requestIp.mw());
 
   // Logger
   app.useLogger(loggerService);
@@ -52,7 +62,7 @@ async function bootstrap() {
 
   const port = configService.get('PORT');
   const host = configService.get('HOST');
-  await app.listen(port, host);
+  await app.listen(port || 3000, host);
 
   if (configService.env === 'development') {
     console.log(configService.env);
