@@ -1,3 +1,4 @@
+import { User } from 'src/api/user/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Post } from './post.entity';
+import { PostEntity } from './post.entity';
 
 @Entity({ name: 'postLike' })
 export class PostLike {
@@ -33,7 +34,11 @@ export class PostLike {
   })
   updatedAt: Date;
 
-  @OneToOne(() => Post, { createForeignKeyConstraints: false })
+  @OneToOne(() => PostEntity, { createForeignKeyConstraints: false })
   @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
-  post: Post;
+  post: PostEntity;
+
+  @OneToOne(() => User, { createForeignKeyConstraints: false })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  user: User;
 }

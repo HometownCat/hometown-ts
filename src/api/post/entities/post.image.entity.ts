@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Post } from './post.entity';
+import { PostEntity } from './post.entity';
 
 @Entity({ name: 'postImage' })
 export class PostImage {
@@ -66,9 +66,9 @@ export class PostImage {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => Post, {
+  @ManyToOne(() => PostEntity, {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
-  post: Post;
+  post: PostEntity;
 }

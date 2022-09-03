@@ -1,7 +1,6 @@
 import { PostImage } from './post.image.entity';
 import { PostLike } from './post.like.entity';
 import { PostComment } from './post.comment.entity';
-import { PostContent } from './post.content.entity';
 import {
   Column,
   CreateDateColumn,
@@ -14,12 +13,15 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'post' })
-export class Post {
+export class PostEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column({ type: 'text', name: 'title', nullable: false })
   title: string;
+
+  @Column({ type: 'mediumtext', name: 'content', nullable: false })
+  content: string;
 
   @Column({
     type: 'timestamp',
@@ -35,9 +37,6 @@ export class Post {
     default: null,
   })
   updatedAt: Date;
-
-  @OneToOne(() => PostContent, (postContent) => postContent.post)
-  postContent: PostContent;
 
   @OneToMany(() => PostComment, (postComments) => postComments.post)
   postComment: PostComment[];
