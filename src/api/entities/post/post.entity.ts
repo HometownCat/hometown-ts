@@ -1,6 +1,6 @@
-import { PostImage } from './post.image.entity';
-import { PostLike } from './post.like.entity';
-import { PostComment } from './post.comment.entity';
+import { PostImage } from './postImage.entity';
+import { PostLike } from './postLike.entity';
+import { PostComment } from './postComment.entity';
 import {
   Column,
   CreateDateColumn,

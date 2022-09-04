@@ -1,7 +1,7 @@
 import { CreatePostDto } from './dtos/create.dto';
 import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
-import { PostEntity } from './entities/post.entity';
 import { PostService } from './post.service';
+import { PostEntity } from '../entities/post/post.entity';
 
 @Controller('post')
 export class PostController {

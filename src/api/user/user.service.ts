@@ -5,7 +5,7 @@ import HttpError from 'src/common/exceptions/http.exception';
 import { HttpStatus, Injectable } from '@nestjs/common';
 
 // import { CreateUserDto } from './dtos/create-user.dto';
-import { User } from './user.entity';
+import { User } from '../entities/user/user.entity';
 import { UserRepository } from './user.repository';
 
 @Injectable()

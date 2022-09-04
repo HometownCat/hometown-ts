@@ -66,7 +66,7 @@ export class ConfigService {
       password: this.get('DATABASE_PASSWORD'),
       database: this.get('DATABASE_DATABASE'),
       synchronize: this.getBoolean('DATABASE_SYNCHRONIZE'),
-      entities: [__dirname + '/../**/*.entity.js'],
+      entities: [__dirname + 'src/api/entities/**/*.entity.{js,ts}'],
       namingStrategy: new SnakeNamingStrategy(),
       // keepConnectionAlive: true,
       logging: ['error'],
