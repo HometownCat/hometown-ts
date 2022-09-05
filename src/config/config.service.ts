@@ -150,7 +150,7 @@ export class ConfigService {
       forbidNonWhitelisted: true,
       transform: true,
       exceptionFactory: (errors: ValidationError[]) => {
-        const messages = errors.map(error => {
+        const messages = errors.map((error) => {
           return {
             error: `${error.property} has wrong value ${error.value}.`,
             message: Object.values(error.constraints).join(''),

@@ -4,7 +4,7 @@
   "description": "우리동네 킹냥이 백엔드",
   "author": "uiurihappy",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -24,14 +24,15 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
-    "@nestjs/config": "^1.0.1",
+    "@nestjs/config": "^1.2.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^1.0.1",
     "@nestjs/swagger": "^5.0.9",
-    "@nestjs/typeorm": "^8.0.2",
+    "@nestjs/typeorm": "^9.0.0",
+    "@types/async": "^3.2.13",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
@@ -66,17 +67,18 @@
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/bcrypt": "^5.0.0",
+    "@types/compression": "^1.7.2",
     "@types/cron": "^1.7.3",
     "@types/express": "^4.17.13",
     "@types/faker": "^5.5.9",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "27.4.1",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.0.0",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
     "@types/supertest": "^2.0.11",
-    "@typescript-eslint/eslint-plugin": "^4.28.2",
-    "@typescript-eslint/parser": "^4.28.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
@@ -92,10 +94,6 @@
     "typescript": "^4.3.5"
   },
   "jest": {
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
     "moduleFileExtensions": [
       "js",
       "json",
@@ -110,9 +108,6 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "src/(.*)": "<rootDir>/$1"
-    }
+    "testEnvironment": "node"
   }
 }

@@ -36,7 +36,7 @@ dotenv.config();
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DATABASE,
         synchronize: false,
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [join(__dirname + '/**/*.entity{.ts,.js}')],
         // entities:
         //   process.env.NODEMON_START === 'TRUE'
         //     ? ['src/api/entities/**/*.entity{.js,.ts}']
