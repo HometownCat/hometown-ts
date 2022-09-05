@@ -1,17 +1,23 @@
 import { BoardRepository } from './board.repository';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import HttpError from 'src/common/exceptions/http.exception';
 import { CreateBoardDto } from './dtos/create.dto';
 import { HttpMessage } from 'src/common/utils/errors/http-message.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from 'src/services/entities/board/board.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BoardService {
-  constructor(private boardRepository: BoardRepository) {}
-
+  //constructor(private boardRepository: BoardRepository) {}
+  constructor(
+    @Inject('BOARD_REPOSITORY')
+    private boardRepository: Repository<Board>,
+  ) {}
   async findOne(boardId: number): Promise<Board> {
-    const board = await this.boardRepository.getOneById(boardId);
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
 
     if (board === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);

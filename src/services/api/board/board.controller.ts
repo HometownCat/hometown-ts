@@ -18,6 +18,7 @@ export class BoardController {
   @HttpCode(200)
   async findOneboard(@Param('id') boardId: number): Promise<Board> {
     const board = await this.boardService.findOne(boardId);
+    // const data: Board = { ...board };
     return board;
   }
 

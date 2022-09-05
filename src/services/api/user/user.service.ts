@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import HttpError from 'src/common/exceptions/http.exception';
 
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 // import { CreateUserDto } from './dtos/create-user.dto';
 import { UserRepository } from './user.repository';
@@ -11,8 +11,11 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
-
+  //constructor(private userRepository: UserRepository) {}
+  constructor(
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<User>,
+  ) {}
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();
 

@@ -35,12 +35,12 @@ export class Board {
   })
   updatedAt: Date;
 
-  @OneToMany(() => BoardComment, (boardComments) => boardComments.board)
+  @OneToMany(() => BoardComment, boardComments => boardComments.board)
   boardComment: BoardComment[];
 
-  @OneToOne(() => BoardLike, (boardLikes) => boardLikes.board)
+  @OneToOne(() => BoardLike, boardLikes => boardLikes.board)
   boardLike: BoardLike;
 
-  @OneToMany(() => BoardImage, (boardImages) => boardImages.board)
+  @OneToMany(() => BoardImage, boardImages => boardImages.board)
   boardImage: BoardImage[];
 }

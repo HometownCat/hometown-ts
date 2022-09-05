@@ -1,4 +1,3 @@
-import { BoardLike } from './../board/boardLike.entity';
 import {
   BaseEntity,
   Column,
@@ -6,6 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BoardLike } from '../board/boardLike.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -48,6 +48,6 @@ export class User {
   })
   updatedAt: Date;
 
-  @OneToOne(() => BoardLike, (boardLikes) => boardLikes.board)
+  @OneToOne(() => BoardLike, boardLikes => boardLikes.board)
   boardLike: BoardLike;
 }
