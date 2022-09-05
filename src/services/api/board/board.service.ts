@@ -4,12 +4,12 @@ import HttpError from 'src/common/exceptions/http.exception';
 import { CreateBoardDto } from './dtos/create.dto';
 import { HttpMessage } from 'src/common/utils/errors/http-message.enum';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Board } from '../entities/board/board.entity';
+import { Board } from 'src/services/entities/board/board.entity';
 
 @Injectable()
 export class BoardService {
   constructor(
-    // @InjectRepository(Board, 'hometown')
+    @InjectRepository(Board, 'hometown')
     private readonly boardRepository: BoardRepository,
   ) {}
 

@@ -1,4 +1,3 @@
-import { User } from 'src/api/entities/user/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 import { Board } from './board.entity';
 
 @Entity({ name: 'boardLike' })

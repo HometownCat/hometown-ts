@@ -1,5 +1,5 @@
+import { User } from 'src/services/entities/user/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from '../entities/user/user.entity';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async getOneByEmail(email: string): Promise<User> {

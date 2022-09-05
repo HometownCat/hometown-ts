@@ -1,19 +1,17 @@
 import * as bcrypt from 'bcrypt';
 import HttpError from 'src/common/exceptions/http.exception';
-// import { HttpMessage } from 'src/common/utils/errors/http-message.enum';
 
 import { HttpStatus, Injectable } from '@nestjs/common';
 
 // import { CreateUserDto } from './dtos/create-user.dto';
 import { UserRepository } from './user.repository';
-import { User } from '../entities/user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { User } from 'src/services/entities/user/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    // @InjectRepository(User, 'hometown')
+    @InjectRepository(User, 'hometown')
     private readonly userRepository: UserRepository,
   ) {}
 

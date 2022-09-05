@@ -59,20 +59,21 @@ export class ConfigService {
 
   get typeOrmConfig(): TypeOrmModuleOptions {
     return {
+      name: 'hometown',
       type: 'mysql',
-      host: this.get('DATABASE_HOST'),
-      port: this.getNumber('DATABASE_PORT'),
-      username: this.get('DATABASE_USERNAME'),
-      password: this.get('DATABASE_PASSWORD'),
-      database: this.get('DATABASE_DATABASE'),
-      synchronize: this.getBoolean('DATABASE_SYNCHRONIZE'),
+      host: this.get('MYSQL_HOST'),
+      port: this.getNumber('MYSQL_PORT'),
+      username: this.get('MYSQL_USER'),
+      password: this.get('MYSQL_PASSWORD'),
+      database: this.get('MYSQL_DATABASE'),
+      synchronize: this.getBoolean('MYSQL_SYNCHRONIZE'),
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       // entities:
       //   process.env.NODEMON_START === 'TRUE'
       //     ? ['src/api/entities/**/*.entity{.js,.ts}']
       //     : ['dist/api/entities/**/*.entity{.js,.ts}'],
       namingStrategy: new SnakeNamingStrategy(),
-      keepConnectionAlive: true,
+      //keepConnectionAlive: true,
       logging: ['error'],
       timezone: '+09:00',
     };

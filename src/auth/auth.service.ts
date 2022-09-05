@@ -1,6 +1,6 @@
 import { AuthRepository } from './auth.repository';
 import { Injectable } from '@nestjs/common';
-import { Auth } from '../api/entities/auth/auth.entity';
+import { Auth } from 'src/services/entities/auth/auth.entity';
 
 @Injectable()
 export class AuthService {

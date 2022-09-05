@@ -1,7 +1,7 @@
-import { Board } from '../entities/board/board.entity';
 import { CreateBoardDto } from './dtos/create.dto';
 import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { BoardService } from './board.service';
+import { Board } from 'src/services/entities/board/board.entity';
 
 @Controller('board')
 export class BoardController {

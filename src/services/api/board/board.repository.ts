@@ -1,4 +1,4 @@
-import { Board } from '../entities/board/board.entity';
+import { Board } from 'src/services/entities/board/board.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(Board)

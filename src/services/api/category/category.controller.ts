@@ -1,6 +1,6 @@
 import { CategoryService } from './category.service';
 import { Controller, Get, HttpCode } from '@nestjs/common';
-import { Category } from '../entities/category/category.entity';
+import { Category } from 'src/services/entities/category/category.entity';
 
 @Controller('category')
 export class CategoryController {
