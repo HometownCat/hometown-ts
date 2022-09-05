@@ -1,19 +1,16 @@
-import { PostImage } from './postImage.entity';
-import { PostLike } from './postLike.entity';
-import { PostComment } from './postComment.entity';
+import { BoardImage } from './boardImage.entity';
+import { BoardLike } from './boardLike.entity';
+import { BoardComment } from './boardComment.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'post' })
-export class PostEntity {
+@Entity({ name: 'board' })
+export class Board {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -38,12 +35,12 @@ export class PostEntity {
   })
   updatedAt: Date;
 
-  @OneToMany(() => PostComment, (postComments) => postComments.post)
-  postComment: PostComment[];
+  @OneToMany(() => BoardComment, (boardComments) => boardComments.board)
+  boardComment: BoardComment[];
 
-  @OneToOne(() => PostLike, (postLikes) => postLikes.post)
-  postLike: PostLike;
+  @OneToOne(() => BoardLike, (boardLikes) => boardLikes.board)
+  boardLike: BoardLike;
 
-  @OneToMany(() => PostImage, (postImage) => postImage.post)
-  postImage: PostImage[];
+  @OneToMany(() => BoardImage, (boardImages) => boardImages.board)
+  boardImage: BoardImage[];
 }

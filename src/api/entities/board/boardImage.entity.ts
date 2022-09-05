@@ -8,10 +8,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostEntity } from './post.entity';
+import { Board } from './board.entity';
 
-@Entity({ name: 'postImage' })
-export class PostImage {
+@Entity({ name: 'boardImage' })
+export class BoardImage {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -66,9 +66,9 @@ export class PostImage {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => PostEntity, {
+  @ManyToOne(() => Board, {
     createForeignKeyConstraints: false,
   })
-  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
-  post: PostEntity;
+  @JoinColumn({ name: 'boardId', referencedColumnName: 'id' })
+  board: Board;
 }

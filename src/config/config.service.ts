@@ -19,11 +19,11 @@ import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOpti
 export class ConfigService {
   constructor() {
     dotenv.config({
-      path:
-        process.env.NODE_ENV === 'development' ||
-        process.env.NODE_ENV === 'dummy'
-          ? '.development.env'
-          : '.production.env',
+      path: '.env',
+      // process.env.NODE_ENV === 'development' ||
+      // process.env.NODE_ENV === 'dummy'
+      //   ? '.development.env'
+      //   : '.production.env',
     });
   }
 
@@ -66,9 +66,13 @@ export class ConfigService {
       password: this.get('DATABASE_PASSWORD'),
       database: this.get('DATABASE_DATABASE'),
       synchronize: this.getBoolean('DATABASE_SYNCHRONIZE'),
-      entities: [__dirname + 'src/api/entities/**/*.entity.{js,ts}'],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      // entities:
+      //   process.env.NODEMON_START === 'TRUE'
+      //     ? ['src/api/entities/**/*.entity{.js,.ts}']
+      //     : ['dist/api/entities/**/*.entity{.js,.ts}'],
       namingStrategy: new SnakeNamingStrategy(),
-      // keepConnectionAlive: true,
+      keepConnectionAlive: true,
       logging: ['error'],
       timezone: '+09:00',
     };

@@ -19,8 +19,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
+  const env: string = process.env.ENVIRONMENT;
+  const app =
+    env === 'development'
+      ? await NestFactory.create(AppModule)
+      : await NestFactory.create(AppModule, { logger: ['error'] });
   const configService = app.select(ConfigModule).get(ConfigService);
   const loggerService = app.select(ConfigModule).get(LoggerService);
 
@@ -28,7 +31,6 @@ async function bootstrap() {
   app.enableCors(configService.corsConfig);
 
   // Proxy
-  app.enable('trust proxy');
 
   // Validation
   app.useGlobalPipes(new ValidationPipe(configService.validationConfig));
@@ -54,6 +56,7 @@ async function bootstrap() {
       },
     ),
   );
+  console.log(process.env.DATABASE_DATABASE);
 
   // Swagger
   if (['development'].includes(configService.env)) {

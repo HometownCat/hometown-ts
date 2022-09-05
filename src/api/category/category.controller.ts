@@ -8,7 +8,7 @@ export class CategoryController {
   @Get('/all')
   @HttpCode(200)
   async findAll(): Promise<Category[]> {
-    const posts = await this.categoryService.findAll();
-    return posts;
+    const categorys = await this.categoryService.findAll();
+    return categorys;
   }
 }

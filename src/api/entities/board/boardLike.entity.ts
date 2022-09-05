@@ -9,10 +9,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostEntity } from './post.entity';
+import { Board } from './board.entity';
 
-@Entity({ name: 'postLike' })
-export class PostLike {
+@Entity({ name: 'boardLike' })
+export class BoardLike {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -34,9 +34,9 @@ export class PostLike {
   })
   updatedAt: Date;
 
-  @OneToOne(() => PostEntity, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
-  post: PostEntity;
+  @OneToOne(() => BoardLike, { createForeignKeyConstraints: false })
+  @JoinColumn({ name: 'boardId', referencedColumnName: 'id' })
+  board: BoardLike;
 
   @OneToOne(() => User, { createForeignKeyConstraints: false })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })

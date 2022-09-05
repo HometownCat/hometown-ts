@@ -1,17 +1,14 @@
+import { BoardLike } from './../board/boardLike.entity';
 import {
+  BaseEntity,
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
-import { PostLike } from '../post/postLike.entity';
 
 @Entity({ name: 'user' })
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -51,6 +48,6 @@ export class User {
   })
   updatedAt: Date;
 
-  @OneToOne(() => PostLike, (postLikes) => postLikes.post)
-  postLike: PostLike;
+  @OneToOne(() => BoardLike, (boardLikes) => boardLikes.board)
+  boardLike: BoardLike;
 }
