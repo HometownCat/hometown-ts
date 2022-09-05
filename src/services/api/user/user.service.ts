@@ -7,13 +7,11 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/services/entities/user/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User, 'hometown')
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();

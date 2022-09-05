@@ -14,16 +14,11 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { ISwaggerConfig } from './swagger/interface';
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 export class ConfigService {
   constructor() {
     dotenv.config({
       path: '.env',
-      // process.env.NODE_ENV === 'development' ||
-      // process.env.NODE_ENV === 'dummy'
-      //   ? '.development.env'
-      //   : '.production.env',
     });
   }
 
@@ -59,21 +54,16 @@ export class ConfigService {
 
   get typeOrmConfig(): TypeOrmModuleOptions {
     return {
-      name: 'hometown',
       type: 'mysql',
       host: this.get('MYSQL_HOST'),
-      port: this.getNumber('MYSQL_PORT'),
+      port: +this.getNumber('MYSQL_PORT'),
       username: this.get('MYSQL_USER'),
       password: this.get('MYSQL_PASSWORD'),
       database: this.get('MYSQL_DATABASE'),
-      synchronize: this.getBoolean('MYSQL_SYNCHRONIZE'),
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      // entities:
-      //   process.env.NODEMON_START === 'TRUE'
-      //     ? ['src/api/entities/**/*.entity{.js,.ts}']
-      //     : ['dist/api/entities/**/*.entity{.js,.ts}'],
+      synchronize: false,
+      entities: [__dirname + '/../**/*.entity.js'],
       namingStrategy: new SnakeNamingStrategy(),
-      //keepConnectionAlive: true,
+      keepConnectionAlive: true,
       logging: ['error'],
       timezone: '+09:00',
     };
@@ -160,7 +150,7 @@ export class ConfigService {
       forbidNonWhitelisted: true,
       transform: true,
       exceptionFactory: (errors: ValidationError[]) => {
-        const messages = errors.map((error) => {
+        const messages = errors.map(error => {
           return {
             error: `${error.property} has wrong value ${error.value}.`,
             message: Object.values(error.constraints).join(''),

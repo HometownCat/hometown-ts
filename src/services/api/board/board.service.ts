@@ -8,10 +8,7 @@ import { Board } from 'src/services/entities/board/board.entity';
 
 @Injectable()
 export class BoardService {
-  constructor(
-    @InjectRepository(Board, 'hometown')
-    private readonly boardRepository: BoardRepository,
-  ) {}
+  constructor(private boardRepository: BoardRepository) {}
 
   async findOne(boardId: number): Promise<Board> {
     const board = await this.boardRepository.getOneById(boardId);
