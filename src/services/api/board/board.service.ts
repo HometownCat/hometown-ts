@@ -9,11 +9,11 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class BoardService {
-  //constructor(private boardRepository: BoardRepository) {}
-  constructor(
-    @Inject('BOARD_REPOSITORY')
-    private boardRepository: Repository<Board>,
-  ) {}
+  constructor(private boardRepository: BoardRepository) {}
+  // constructor(
+  //   @Inject('BOARD_REPOSITORY')
+  //   private boardRepository: Repository<Board>,
+  // ) {}
   async findOne(boardId: number): Promise<Board> {
     const board = await this.boardRepository.findOne({
       where: { id: boardId },

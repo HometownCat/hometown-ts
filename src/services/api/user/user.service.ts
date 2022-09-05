@@ -11,11 +11,11 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  //constructor(private userRepository: UserRepository) {}
-  constructor(
-    @Inject('USER_REPOSITORY')
-    private userRepository: Repository<User>,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
+  // constructor(
+  //   @Inject('USER_REPOSITORY')
+  //   private userRepository: Repository<User>,
+  // ) {}
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();
 

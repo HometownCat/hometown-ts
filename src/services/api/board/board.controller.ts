@@ -16,7 +16,7 @@ export class BoardController {
 
   @Get('/:id')
   @HttpCode(200)
-  async findOneboard(@Param('id') boardId: number): Promise<Board> {
+  async findOneBoard(@Param('id') boardId: number): Promise<Board> {
     const board = await this.boardService.findOne(boardId);
     // const data: Board = { ...board };
     return board;
@@ -24,7 +24,7 @@ export class BoardController {
 
   @Post('/set')
   @HttpCode(200)
-  async setboard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
+  async setBoard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
     const board = await this.boardService.save(createBoardDto);
     return board;
   }
