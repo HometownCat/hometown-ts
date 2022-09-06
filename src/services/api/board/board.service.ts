@@ -22,6 +22,7 @@ export class BoardService {
 
     if (board === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+
     return board;
   }
 

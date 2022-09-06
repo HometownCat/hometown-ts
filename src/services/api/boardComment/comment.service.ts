@@ -31,7 +31,7 @@ export class CommentService {
     return Comments;
   }
 
-  async save(createCommentDto: CreateCommentDto): Promise<BoardComment> {
+  async setComment(createCommentDto: CreateCommentDto): Promise<BoardComment> {
     let comment = new BoardComment();
 
     comment = { ...createCommentDto, ...comment };
@@ -41,8 +41,10 @@ export class CommentService {
     } catch (err) {
       throw new HttpError(
         HttpStatus.BAD_REQUEST,
-        HttpMessage.FAIL_SAVE_COMMENT);}
-    
-     return comment;
+        HttpMessage.FAIL_SAVE_COMMENT,
+      );
+    }
+
+    return comment;
   }
 }
