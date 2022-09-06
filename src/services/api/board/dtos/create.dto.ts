@@ -7,9 +7,6 @@ export class CreateBoardDto {
   @IsString()
   content: string;
 
-  @IsNumber()
-  viewCount: number;
-
   @IsDateString()
   createdAt: Date;
 
