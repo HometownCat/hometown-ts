@@ -1,7 +1,9 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
 import { BoardComment } from '@Src/services/entities/board/boardComment.entity';
+import { Response } from 'express';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dtos/create.dto';
+import * as response from '../../../common/tools/response.tool';
 
 @Controller('comment')
 export class CommentController {
@@ -10,9 +12,11 @@ export class CommentController {
   @Post('/register')
   @HttpCode(201)
   async setComment(
+    @Res() res: Response,
     @Body() createCommentDto: CreateCommentDto,
-  ): Promise<BoardComment> {
+  ) {
     const comment = await this.commentService.setComment(createCommentDto);
-    return comment;
+    // return comment;
+    response.success(res, comment);
   }
 }
