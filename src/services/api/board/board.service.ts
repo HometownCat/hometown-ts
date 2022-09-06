@@ -15,6 +15,7 @@ export class BoardService {
     private boardRepository: Repository<Board>,
   ) {}
   async findOne(boardId: number): Promise<Board> {
+    // select * from board where id = ?
     const board = await this.boardRepository.findOne({
       where: { id: boardId },
     });
@@ -25,6 +26,7 @@ export class BoardService {
   }
 
   async findAll(): Promise<Board[]> {
+    // select * from board
     const boards = await this.boardRepository.find();
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
@@ -42,6 +44,7 @@ export class BoardService {
     } catch (err) {
       throw new HttpError(HttpStatus.BAD_REQUEST, HttpMessage.FAIL_SAVE_BOARD);
     }
+
     return board;
   }
 }
