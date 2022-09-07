@@ -16,9 +16,12 @@ export class BoardService {
   ) {}
   async findOne(boardId: number): Promise<Board> {
     // select * from board where id = ?
-    const board = await this.boardRepository.findOne({
-      where: { id: boardId },
-    });
+    const board = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.boardImage', 'boardImage')
+      .leftJoinAndSelect('board.boardComment', 'boardComment')
+      .where('board.id = (:boardId)', { boardId })
+      .getOne();
 
     if (board === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
@@ -35,10 +38,10 @@ export class BoardService {
     return boards;
   }
 
-  async save(createboardDto: CreateBoardDto): Promise<Board> {
+  async save(createBoardDto: CreateBoardDto): Promise<Board> {
     let board = new Board();
 
-    board = { ...createboardDto, ...board };
+    board = { ...createBoardDto, ...board };
 
     try {
       board = await this.boardRepository.save(board);

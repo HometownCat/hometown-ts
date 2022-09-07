@@ -1,4 +1,10 @@
-import { IsArray, IsDateString, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateBoardDto {
   @IsString()
@@ -12,4 +18,7 @@ export class CreateBoardDto {
 
   @IsDateString()
   updatedAt: Date;
+
+  @IsNumber()
+  userId: number;
 }

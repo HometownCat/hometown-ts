@@ -6,12 +6,13 @@ import {
   HttpCode,
   Param,
   Post,
+  Req,
   Res,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { Board } from 'src/services/entities/board/board.entity';
 import * as response from '../../../common/tools/response.tool';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Controller('board')
 export class BoardController {
@@ -35,8 +36,12 @@ export class BoardController {
   }
 
   @Post('/set')
-  @HttpCode(200)
-  async setboard(@Res() res: Response, @Body() createBoardDto: CreateBoardDto) {
+  @HttpCode(201)
+  async setboard(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() createBoardDto: CreateBoardDto,
+  ) {
     const board = await this.boardService.save(createBoardDto);
     // return board;
     response.success(res, board);
