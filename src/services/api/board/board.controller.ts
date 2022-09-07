@@ -20,7 +20,7 @@ export class BoardController {
 
   @Get('/list')
   @HttpCode(200)
-  async findAll(@Res() res: Response) {
+  async findAll(@Req() req: Request, @Res() res: Response) {
     const boards = await this.boardService.findAll();
     // return boards;
     response.success(res, boards);
@@ -28,7 +28,13 @@ export class BoardController {
 
   @Get('/:id')
   @HttpCode(200)
-  async findOneboard(@Res() res: Response, @Param('id') boardId: number) {
+  async findOneboard(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('id') boardId: number,
+  ) {
+    console.log(req.params);
+
     const board = await this.boardService.findOne(boardId);
     // const data: Board = { ...board };
     // return board;
