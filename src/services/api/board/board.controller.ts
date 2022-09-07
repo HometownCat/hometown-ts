@@ -17,7 +17,7 @@ import { Response } from 'express';
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
-  @Get('/all')
+  @Get('/list')
   @HttpCode(200)
   async findAll(@Res() res: Response) {
     const boards = await this.boardService.findAll();

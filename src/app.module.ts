@@ -14,7 +14,6 @@ import { User } from './services/entities/user/user.entity';
 import { Auth } from './services/entities/auth/auth.entity';
 import { Category } from './services/entities/category/category.entity';
 import { Board } from './services/entities/board/board.entity';
-import { BoardLike } from './services/entities/board/boardLike.entity';
 import { BoardImage } from './services/entities/board/boardImage.entity';
 import { BoardComment } from './services/entities/board/boardComment.entity';
 import { APP_FILTER } from '@nestjs/core';

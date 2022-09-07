@@ -1,13 +1,16 @@
 import { BoardImage } from './boardImage.entity';
-import { BoardLike } from './boardLike.entity';
 import { BoardComment } from './boardComment.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Entity({ name: 'board' })
 export class Board {
@@ -38,9 +41,12 @@ export class Board {
   @OneToMany(() => BoardComment, boardComments => boardComments.board)
   boardComment: BoardComment[];
 
-  @OneToOne(() => BoardLike, boardLikes => boardLikes.board)
-  boardLike: BoardLike;
-
   @OneToMany(() => BoardImage, boardImages => boardImages.board)
   boardImage: BoardImage[];
+
+  @ManyToOne(() => User, {
+    createForeignKeyConstraints: false,
+  })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  user: User;
 }
