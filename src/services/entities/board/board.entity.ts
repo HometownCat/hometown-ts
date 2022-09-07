@@ -38,10 +38,10 @@ export class Board {
   })
   updatedAt: Date;
 
-  @OneToMany(() => BoardComment, boardComments => boardComments.board)
+  @OneToMany(() => BoardComment, boardComments => boardComments.boardId)
   boardComment: BoardComment[];
 
-  @OneToMany(() => BoardImage, boardImages => boardImages.board)
+  @OneToMany(() => BoardImage, boardImages => boardImages.boardId)
   boardImage: BoardImage[];
 
   @ManyToOne(() => User, {

@@ -70,5 +70,5 @@ export class BoardImage {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: 'boardId', referencedColumnName: 'id' })
-  board: Board;
+  boardId: Board;
 }
