@@ -31,7 +31,9 @@ export class BoardService {
 
   async findAll(): Promise<Board[]> {
     // select * from board
-    const boards = await this.boardRepository.find();
+    const boards = await this.boardRepository.find({
+      relations: ['boardComment', 'boardImage'],
+    });
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
 
