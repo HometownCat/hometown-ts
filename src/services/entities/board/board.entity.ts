@@ -23,6 +23,15 @@ export class Board {
   @Column({ type: 'mediumtext', name: 'content', nullable: false })
   content: string;
 
+  @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
+  viewCount: number;
+
+  @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
+  likeCount: number;
+
+  @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
+  commentCount: number;
+
   @Column({
     type: 'timestamp',
     name: 'createdAt',

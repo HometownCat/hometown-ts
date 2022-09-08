@@ -32,6 +32,17 @@ export class BoardService {
   async findAll(): Promise<Board[]> {
     // select * from board
     const boards = await this.boardRepository.find({
+      select: [
+        'id',
+        'title',
+        'content',
+        'viewCount',
+        'likeCount',
+        'commentCount',
+        'createdAt',
+        'updatedAt',
+        'userId',
+      ],
       relations: ['boardComment', 'boardImage'],
     });
     if (boards === undefined)
