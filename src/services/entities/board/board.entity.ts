@@ -57,5 +57,5 @@ export class Board {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  userId: User;
+  user: User;
 }

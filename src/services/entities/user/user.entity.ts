@@ -49,6 +49,6 @@ export class User {
   })
   updatedAt: Date;
 
-  @OneToMany(() => Board, boards => boards.userId)
+  @OneToMany(() => Board, boards => boards.user)
   board: Board[];
 }

@@ -30,21 +30,29 @@ export class BoardService {
   }
 
   async findAll(): Promise<Board[]> {
+    // test
     // select * from board
-    const boards = await this.boardRepository.find({
-      select: [
-        'id',
-        'title',
-        'content',
-        'viewCount',
-        'likeCount',
-        'commentCount',
-        'createdAt',
-        'updatedAt',
-        'userId',
-      ],
-      relations: ['boardComment', 'boardImage'],
-    });
+    // const boards = await this.boardRepository.find({
+    //   select: [
+    //     'id',
+    //     'title',
+    //     'content',
+    //     'viewCount',
+    //     'likeCount',
+    //     'commentCount',
+    //     'createdAt',
+    //     'updatedAt',
+    //     'userId',
+    //   ],
+    //   relations: ['boardComment', 'boardImage', 'user.id = board.userId'],
+    // });
+
+    const boards = await this.boardRepository
+      .createQueryBuilder('board')
+      .leftJoinAndSelect('board.boardImage', 'boardImage')
+      .leftJoinAndSelect('board.boardComment', 'boardComment')
+      .leftJoinAndSelect('board.user', 'user')
+      .getMany();
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
 
