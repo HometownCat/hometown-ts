@@ -2,9 +2,11 @@ import { CreateBoardDto } from './dtos/create.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -13,6 +15,7 @@ import { BoardService } from './board.service';
 import { Board } from 'src/services/entities/board/board.entity';
 import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
+import { UpdateBoardDto } from './dtos/update.dto';
 
 @Controller('board')
 export class BoardController {
@@ -50,6 +53,25 @@ export class BoardController {
   ) {
     const board = await this.boardService.save(createBoardDto);
     // return board;
+    response.success(res, board);
+  }
+
+  @Patch('/update/:boardId')
+  @HttpCode(201)
+  async updateOne(
+    @Param('boardId') boardId: number,
+    @Body() updateBoardDto: UpdateBoardDto,
+  ): Promise<string> {
+    await this.boardService.updateOne(boardId, updateBoardDto);
+
+    return 'success';
+  }
+
+  @Delete('/delete/:boardId')
+  @HttpCode(201)
+  async deleteOne(@Res() res: Response, @Param('boardId') boardId: number) {
+    const board = await this.boardService.deleteOne(boardId);
+
     response.success(res, board);
   }
 }

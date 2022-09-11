@@ -35,6 +35,7 @@ export class BoardComment {
 
   @ManyToOne(() => Board, {
     createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'boardId', referencedColumnName: 'id' })
   boardId: Board;

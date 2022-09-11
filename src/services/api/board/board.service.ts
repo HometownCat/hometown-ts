@@ -1,3 +1,4 @@
+import { UpdateBoardDto } from './dtos/update.dto';
 import { BoardRepository } from './board.repository';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import HttpError from 'src/common/exceptions/http.exception';
@@ -68,6 +69,50 @@ export class BoardService {
       board = await this.boardRepository.save(board);
     } catch (err) {
       throw new HttpError(HttpStatus.BAD_REQUEST, HttpMessage.FAIL_SAVE_BOARD);
+    }
+
+    return board;
+  }
+
+  async updateOne(
+    boardId: number,
+    updateBoardDto: UpdateBoardDto,
+  ): Promise<void> {
+    let board = await this.findOne(boardId);
+
+    if (board === undefined)
+      throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+
+    board = { ...board, ...updateBoardDto };
+    try {
+      await this.boardRepository.save(board);
+    } catch (err) {
+      throw new HttpError(
+        HttpStatus.BAD_REQUEST,
+        HttpMessage.FAIL_UPDATE_BOARD,
+      );
+    }
+    return;
+  }
+
+  async deleteOne(boardId: number): Promise<Board> {
+    const board = await this.findOne(boardId);
+
+    if (board === undefined)
+      throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+
+    try {
+      await this.boardRepository
+        .createQueryBuilder()
+        .delete()
+        .from(Board)
+        .where('id = :id', { id: boardId })
+        .execute();
+    } catch (err) {
+      throw new HttpError(
+        HttpStatus.BAD_REQUEST,
+        HttpMessage.FAIL_DELETE_BOARD,
+      );
     }
 
     return board;

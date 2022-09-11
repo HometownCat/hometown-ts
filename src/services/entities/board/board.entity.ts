@@ -47,14 +47,19 @@ export class Board {
   })
   updatedAt: Date;
 
-  @OneToMany(() => BoardComment, boardComments => boardComments.boardId)
+  @OneToMany(() => BoardComment, boardComments => boardComments.boardId, {
+    cascade: true,
+  })
   boardComment: BoardComment[];
 
-  @OneToMany(() => BoardImage, boardImages => boardImages.boardId)
+  @OneToMany(() => BoardImage, boardImages => boardImages.boardId, {
+    cascade: true,
+  })
   boardImage: BoardImage[];
 
   @ManyToOne(() => User, {
     createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
