@@ -1,3 +1,4 @@
+import { UpdateCommentDto } from './dtos/update.dto';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import HttpError from '@Src/common/exceptions/http.exception';
 import { HttpMessage } from '@Src/common/utils/errors/http-message.enum';
@@ -31,7 +32,7 @@ export class CommentService {
     return Comments;
   }
 
-  async setComment(createCommentDto: CreateCommentDto): Promise<BoardComment> {
+  async save(createCommentDto: CreateCommentDto): Promise<BoardComment> {
     let comment = new BoardComment();
 
     comment = { ...createCommentDto, ...comment };
@@ -46,5 +47,49 @@ export class CommentService {
     }
 
     return comment;
+  }
+
+  async updateOne(
+    commentId: number,
+    updateCommentDto: UpdateCommentDto,
+  ): Promise<void> {
+    let comment = await this.findOne(commentId);
+
+    if (comment === undefined)
+      throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_COMMENT);
+
+    comment = { ...comment, ...updateCommentDto };
+    try {
+      await this.commentRepository.save(comment);
+    } catch (err) {
+      throw new HttpError(
+        HttpStatus.BAD_REQUEST,
+        HttpMessage.FAIL_UPDATE_BOARD,
+      );
+    }
+    return;
+  }
+
+  async deleteOne(commentId: number): Promise<BoardComment> {
+    const board = await this.findOne(commentId);
+
+    if (board === undefined)
+      throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+
+    try {
+      await this.commentRepository
+        .createQueryBuilder()
+        .delete()
+        .from(BoardComment)
+        .where('id = :id', { id: commentId })
+        .execute();
+    } catch (err) {
+      throw new HttpError(
+        HttpStatus.BAD_REQUEST,
+        HttpMessage.FAIL_DELETE_COMMENT,
+      );
+    }
+
+    return board;
   }
 }
