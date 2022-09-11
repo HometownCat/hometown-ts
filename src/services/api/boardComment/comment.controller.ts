@@ -23,7 +23,7 @@ export class CommentController {
 
   @Get('/list')
   @HttpCode(200)
-  async findAll(@Req() req: Request, @Res() res: Response) {
+  async findAll(@Res() res: Response) {
     const comments = await this.commentService.findAll();
 
     response.success(res, comments);

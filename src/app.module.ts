@@ -19,6 +19,7 @@ import { BoardComment } from './services/entities/board/boardComment.entity';
 import { APP_FILTER } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { CommentModule } from './services/api/boardComment/comment.module';
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ dotenv.config();
     }),
     UserModule,
     BoardModule,
+    CommentModule,
     CategoryModule,
     AuthModule,
   ],

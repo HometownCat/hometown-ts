@@ -1,3 +1,4 @@
+import { Board } from 'src/services/entities/board/board.entity';
 import { UpdateCommentDto } from './dtos/update.dto';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import HttpError from '@Src/common/exceptions/http.exception';
@@ -11,6 +12,8 @@ export class CommentService {
   constructor(
     @Inject('COMMENT_REPOSITORY')
     private commentRepository: Repository<BoardComment>,
+    @Inject('BOARD_REPOSITORY')
+    private boardRepository: Repository<Board>,
   ) {}
   async findOne(commentId: number): Promise<BoardComment> {
     // select * from Comment where id = ?
@@ -26,6 +29,7 @@ export class CommentService {
   async findAll(): Promise<BoardComment[]> {
     // select * from Comment
     const Comments = await this.commentRepository.find();
+
     if (Comments === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_COMMENT);
 
@@ -34,11 +38,19 @@ export class CommentService {
 
   async save(createCommentDto: CreateCommentDto): Promise<BoardComment> {
     let comment = new BoardComment();
-
+    const { boardId } = createCommentDto;
     comment = { ...createCommentDto, ...comment };
 
     try {
       comment = await this.commentRepository.save(comment);
+      await this.boardRepository
+        .createQueryBuilder()
+        .update(Board)
+        .set({
+          commentCount: () => 'commentCount + 1',
+        })
+        .where('id = :boardId', { boardId: boardId })
+        .execute();
     } catch (err) {
       throw new HttpError(
         HttpStatus.BAD_REQUEST,
@@ -58,7 +70,7 @@ export class CommentService {
     if (comment === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_COMMENT);
 
-    comment = { ...comment, ...updateCommentDto };
+    comment = { ...updateCommentDto, ...comment };
     try {
       await this.commentRepository.save(comment);
     } catch (err) {
