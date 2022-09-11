@@ -1,3 +1,4 @@
+import { User } from 'src/services/entities/user/user.entity';
 import { UpdateBoardDto } from './dtos/update.dto';
 import { BoardRepository } from './board.repository';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
@@ -54,6 +55,12 @@ export class BoardService {
       .leftJoinAndSelect('board.boardComment', 'boardComment')
       .leftJoinAndSelect('board.user', 'user')
       .getMany();
+    const userId = await this.boardRepository
+      .createQueryBuilder('board')
+      .select('userId')
+      .getOne();
+
+    // boards = { ...boards };
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
 

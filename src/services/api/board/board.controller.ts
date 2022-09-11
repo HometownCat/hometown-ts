@@ -36,8 +36,6 @@ export class BoardController {
     @Res() res: Response,
     @Param('id') boardId: number,
   ) {
-    console.log(req.params);
-
     const board = await this.boardService.findOne(boardId);
     // const data: Board = { ...board };
     // return board;

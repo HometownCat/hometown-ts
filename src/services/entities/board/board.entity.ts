@@ -26,10 +26,10 @@ export class Board {
   @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
   viewCount: number;
 
-  @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
+  @Column({ type: 'mediumint', name: 'likeCount', default: 0 })
   likeCount: number;
 
-  @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
+  @Column({ type: 'mediumint', name: 'commentCount', default: 0 })
   commentCount: number;
 
   @Column({
