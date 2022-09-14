@@ -1,3 +1,4 @@
+import { DeleteCommentDto } from './dtos/delete.dto';
 import {
   Body,
   Controller,
@@ -53,8 +54,12 @@ export class CommentController {
 
   @Delete('/delete/:commentId')
   @HttpCode(201)
-  async deleteOne(@Res() res: Response, @Param('commentId') commentId: number) {
-    const comment = await this.commentService.deleteOne(commentId);
+  async deleteOne(
+    @Res() res: Response,
+    @Param('commentId') commentId: number,
+    @Body() deleteCommentDto: DeleteCommentDto,
+  ) {
+    const comment = await this.commentService.deleteOne(deleteCommentDto);
 
     response.success(res, comment);
   }

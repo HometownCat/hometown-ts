@@ -1,3 +1,4 @@
+import { DeleteCommentDto } from './dtos/delete.dto';
 import { Board } from 'src/services/entities/board/board.entity';
 import { UpdateCommentDto } from './dtos/update.dto';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
@@ -82,7 +83,9 @@ export class CommentService {
     return;
   }
 
-  async deleteOne(commentId: number): Promise<BoardComment> {
+  async deleteOne(deleteCommentDto: DeleteCommentDto): Promise<BoardComment> {
+    const { commentId, boardId } = deleteCommentDto;
+
     const board = await this.findOne(commentId);
 
     if (board === undefined)
@@ -94,6 +97,15 @@ export class CommentService {
         .delete()
         .from(BoardComment)
         .where('id = :id', { id: commentId })
+        .execute();
+
+      await this.boardRepository
+        .createQueryBuilder()
+        .update(Board)
+        .set({
+          commentCount: () => 'commentCount - 1',
+        })
+        .where('id = :boardId', { boardId: boardId })
         .execute();
     } catch (err) {
       throw new HttpError(
