@@ -36,7 +36,7 @@ export class CommentController {
     @Res() res: Response,
     @Body() createCommentDto: CreateCommentDto,
   ) {
-    const comment = await this.commentService.save(createCommentDto);
+    await this.commentService.save(createCommentDto);
     // return comment;
     response.success(res, { message: 'insert success' });
   }
