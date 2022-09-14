@@ -69,12 +69,8 @@ export class BoardService {
       .createQueryBuilder('board')
       .leftJoinAndSelect('board.boardImage', 'boardImage')
       .leftJoinAndSelect('board.boardComment', 'boardComment')
-      .leftJoinAndSelect('board.user', 'user')
+      .innerJoinAndSelect('board.user', 'user', 'user.id = board.userId')
       .getMany();
-    const userId = await this.boardRepository
-      .createQueryBuilder('board')
-      .select('userId')
-      .getOne();
 
     // boards = { ...boards };
     if (boards === undefined)
@@ -103,11 +99,12 @@ export class BoardService {
   ): Promise<void> {
     let board = await this.findOne(boardId);
 
-    if (board === undefined)
-      throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
-
-    board = { ...board, ...updateBoardDto };
     try {
+      if (board === undefined)
+        throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+
+      board = { ...board, ...updateBoardDto };
+
       await this.boardRepository.save(board);
     } catch (err) {
       throw new HttpError(

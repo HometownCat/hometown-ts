@@ -3,7 +3,6 @@ import {
   Column,
   Entity,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Board } from '../board/board.entity';
@@ -49,7 +48,7 @@ export class User {
   })
   updatedAt: Date;
 
-  @OneToMany(() => Board, boards => boards.user, {
+  @OneToMany(() => Board, boards => boards.userId, {
     cascade: true,
   })
   board: Board[];

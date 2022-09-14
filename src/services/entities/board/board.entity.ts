@@ -4,10 +4,8 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
@@ -31,6 +29,9 @@ export class Board {
 
   @Column({ type: 'mediumint', name: 'commentCount', default: 0 })
   commentCount: number;
+
+  @Column({ type: 'tinyint', name: 'likeStatus', default: 0 })
+  likeStatus: number;
 
   @Column({
     type: 'timestamp',
@@ -62,5 +63,5 @@ export class Board {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  user: User;
+  userId: number;
 }

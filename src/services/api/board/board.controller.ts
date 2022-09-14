@@ -57,12 +57,13 @@ export class BoardController {
   @Patch('/update/:boardId')
   @HttpCode(201)
   async updateOne(
+    @Res() res: Response,
     @Param('boardId') boardId: number,
     @Body() updateBoardDto: UpdateBoardDto,
-  ): Promise<string> {
+  ) {
     await this.boardService.updateOne(boardId, updateBoardDto);
 
-    return 'success';
+    response.success(res, { message: 'success' });
   }
 
   @Delete('/delete/:boardId')

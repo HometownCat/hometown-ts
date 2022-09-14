@@ -22,11 +22,14 @@ export class CreateBoardDto {
   // @IsNumber()
   // commentCount: number;
 
-  @IsDateString()
-  createdAt: Date;
+  // @IsNumber()
+  // likeStatus: number;
 
-  @IsDateString()
-  updatedAt: Date;
+  // @IsDateString()
+  // createdAt: Date;
+
+  // @IsDateString()
+  // updatedAt: Date;
 
   @IsNumber()
   userId: number;
