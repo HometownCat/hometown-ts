@@ -17,11 +17,6 @@ import { BoardService } from '../board/board.service';
     ...BoardProviders,
     BoardService,
   ],
-  exports: [
-    ...CommentProviders,
-    CommentService,
-    ...BoardProviders,
-    BoardService,
-  ],
+  exports: [...CommentProviders, CommentService],
 })
 export class CommentModule {}

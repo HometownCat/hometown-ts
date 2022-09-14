@@ -18,11 +18,6 @@ import { CommentProviders } from '../boardComment/comment.providers';
     ...CommentProviders,
     CommentService,
   ],
-  exports: [
-    ...BoardProviders,
-    BoardService,
-    ...CommentProviders,
-    CommentService,
-  ],
+  exports: [...BoardProviders, BoardService],
 })
 export class BoardModule {}
