@@ -38,18 +38,19 @@ export class CommentController {
   ) {
     const comment = await this.commentService.save(createCommentDto);
     // return comment;
-    response.success(res, comment);
+    response.success(res, { message: 'insert success' });
   }
 
   @Patch('/update/:commentId')
   @HttpCode(201)
   async updateOne(
+    @Res() res: Response,
     @Param('commentId') commentId: number,
     @Body() updateCommentDto: UpdateCommentDto,
-  ): Promise<string> {
+  ) {
     await this.commentService.updateOne(commentId, updateCommentDto);
 
-    return 'success';
+    response.success(res, { message: 'update success' });
   }
 
   @Delete('/delete/:commentId')
@@ -64,11 +65,8 @@ export class CommentController {
         "boardId": 1
     }
     */
-    const comment = await this.commentService.deleteOne(
-      commentId,
-      deleteCommentDto,
-    );
+    await this.commentService.deleteOne(commentId, deleteCommentDto);
 
-    response.success(res, comment);
+    response.success(res, { message: 'delete success' });
   }
 }

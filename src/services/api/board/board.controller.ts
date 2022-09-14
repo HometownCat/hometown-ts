@@ -51,7 +51,7 @@ export class BoardController {
   ) {
     const board = await this.boardService.save(createBoardDto);
     // return board;
-    response.success(res, board);
+    response.success(res, { message: 'insert success' });
   }
 
   @Patch('/update/:boardId')
@@ -63,14 +63,14 @@ export class BoardController {
   ) {
     await this.boardService.updateOne(boardId, updateBoardDto);
 
-    response.success(res, { message: 'success' });
+    response.success(res, { message: 'update success' });
   }
 
   @Delete('/delete/:boardId')
   @HttpCode(201)
   async deleteOne(@Res() res: Response, @Param('boardId') boardId: number) {
-    const board = await this.boardService.deleteOne(boardId);
+    await this.boardService.deleteOne(boardId);
 
-    response.success(res, board);
+    response.success(res, { message: 'delete success' });
   }
 }
