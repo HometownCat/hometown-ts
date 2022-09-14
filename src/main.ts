@@ -30,7 +30,7 @@ async function bootstrap() {
 
   // client ip
   app.use(requestIp.mw());
-
+  app.setGlobalPrefix('/api');
   // Proxy
   app.enable('trust proxy');
 
