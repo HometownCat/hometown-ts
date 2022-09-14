@@ -59,7 +59,15 @@ export class CommentController {
     @Param('commentId') commentId: number,
     @Body() deleteCommentDto: DeleteCommentDto,
   ) {
-    const comment = await this.commentService.deleteOne(deleteCommentDto);
+    /*
+    {
+        "boardId": 1
+    }
+    */
+    const comment = await this.commentService.deleteOne(
+      commentId,
+      deleteCommentDto,
+    );
 
     response.success(res, comment);
   }

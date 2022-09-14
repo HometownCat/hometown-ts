@@ -83,8 +83,11 @@ export class CommentService {
     return;
   }
 
-  async deleteOne(deleteCommentDto: DeleteCommentDto): Promise<BoardComment> {
-    const { commentId, boardId } = deleteCommentDto;
+  async deleteOne(
+    commentId: number,
+    deleteCommentDto: DeleteCommentDto,
+  ): Promise<BoardComment> {
+    const { boardId } = deleteCommentDto;
 
     const board = await this.findOne(commentId);
 

@@ -19,14 +19,6 @@ export class BoardService {
   async findOne(boardId: number): Promise<Board> {
     // select * from board where id = ?
     try {
-      // 게시글 조회
-      const board = await this.boardRepository
-        .createQueryBuilder('board')
-        .leftJoinAndSelect('board.boardImage', 'boardImage')
-        .leftJoinAndSelect('board.boardComment', 'boardComment')
-        .where('board.id = (:boardId)', { boardId })
-        .getOne();
-
       // 조회 수 증가
       await this.boardRepository
         .createQueryBuilder()
@@ -36,6 +28,14 @@ export class BoardService {
         })
         .where('id = :boardId', { boardId: boardId })
         .execute();
+
+      // 게시글 조회
+      const board = await this.boardRepository
+        .createQueryBuilder('board')
+        .leftJoinAndSelect('board.boardImage', 'boardImage')
+        .leftJoinAndSelect('board.boardComment', 'boardComment')
+        .where('board.id = (:boardId)', { boardId })
+        .getOne();
 
       if (board === undefined)
         throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
