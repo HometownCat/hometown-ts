@@ -7,19 +7,45 @@ import { HttpMessage } from '@Src/common/utils/errors/http-message.enum';
 import { ICallback } from '@Src/interfaces/common/common.interface';
 import * as async from 'async';
 import * as _ from 'lodash';
+import { Board } from '@Src/services/entities/board/board.entity';
+import { User } from '@Src/services/entities/user/user.entity';
 @Injectable()
 export class BoardLikeService {
   constructor(
     @Inject('BOARDLIKE_REPOSITORY')
     private boardLikeRepository: Repository<BoardLike>,
+    @Inject('BOARD_REPOSITORY')
+    private boardRepository: Repository<Board>,
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<User>,
   ) {}
 
   async likeStatus(boardLikeDto: BoardLikeDto, callback: ICallback) {
-    const { boardId, userId, likeCount, likeStatus, id } = boardLikeDto;
+    const { boardId, userId, likeStatus, id } = boardLikeDto;
     try {
       if (likeStatus === 1) {
         async.waterfall(
           [
+            (callback: ICallback) => {
+              Promise.all([
+                this.boardRepository.findOne({
+                  where: {
+                    id: boardId,
+                  },
+                }),
+                this.userRepository.findOne({
+                  where: {
+                    id: userId,
+                  },
+                }),
+              ])
+                .then(() => {
+                  callback(null, true);
+                })
+                .catch(err => {
+                  callback(err);
+                });
+            },
             (callback: ICallback) => {
               this.boardLikeRepository
                 .createQueryBuilder()
@@ -42,6 +68,26 @@ export class BoardLikeService {
       } else if (likeStatus === 0) {
         async.waterfall(
           [
+            (callback: ICallback) => {
+              Promise.all([
+                this.boardRepository.findOne({
+                  where: {
+                    id: boardId,
+                  },
+                }),
+                this.userRepository.findOne({
+                  where: {
+                    id: userId,
+                  },
+                }),
+              ])
+                .then(() => {
+                  callback(null, true);
+                })
+                .catch(err => {
+                  callback(err);
+                });
+            },
             (callback: ICallback) => {
               this.boardLikeRepository
                 .createQueryBuilder()

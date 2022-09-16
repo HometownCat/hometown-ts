@@ -34,6 +34,7 @@ export class BoardService {
         .createQueryBuilder('board')
         .leftJoinAndSelect('board.boardImage', 'boardImage')
         .leftJoinAndSelect('board.boardComment', 'boardComment')
+        .leftJoinAndSelect('board.boardLike', 'boardLike')
         .where('board.id = (:boardId)', { boardId })
         .getOne();
 
