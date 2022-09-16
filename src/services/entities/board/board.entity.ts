@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
+import { BoardLike } from './boardLike.entity';
 
 @Entity({ name: 'board' })
 export class Board {
@@ -23,9 +24,6 @@ export class Board {
 
   @Column({ type: 'mediumint', name: 'viewCount', default: 0 })
   viewCount: number;
-
-  @Column({ type: 'mediumint', name: 'likeCount', default: 0 })
-  likeCount: number;
 
   @Column({ type: 'mediumint', name: 'commentCount', default: 0 })
   commentCount: number;
@@ -57,6 +55,11 @@ export class Board {
     cascade: true,
   })
   boardImage: BoardImage[];
+
+  @OneToMany(() => BoardLike, boardLikes => boardLikes.boardId, {
+    cascade: true,
+  })
+  boardLike: BoardLike[];
 
   @ManyToOne(() => User, {
     createForeignKeyConstraints: false,

@@ -1,7 +1,7 @@
 import QueryString, { ParsedQs } from 'qs';
 import { Request, Response } from 'express';
 
-export interface Callback {
+export interface ICallback {
   (err?: IError['err'], data?: any | { [key: string]: any }): any;
 }
 

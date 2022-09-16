@@ -20,6 +20,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CommentModule } from './services/api/boardComment/comment.module';
+import { LikeModule } from './services/api/boardLike/boardLike.module';
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ dotenv.config();
     }),
     UserModule,
     BoardModule,
+    LikeModule,
     CommentModule,
     CategoryModule,
     AuthModule,

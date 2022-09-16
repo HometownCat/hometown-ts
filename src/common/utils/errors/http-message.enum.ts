@@ -9,4 +9,5 @@ export enum HttpMessage {
   INVAILD_COMMENT = '유효하지 않는 댓글입니다.',
   FAIL_DELETE_COMMENT = '댓글 삭제 실패했습니다.',
   FAIL_UPDATE_COMMENT = '댓글 수정에 실패했습니다.',
+  FAIL_UPDATE_LIKE = '좋아요 반영이 실패되었습니다.',
 }
