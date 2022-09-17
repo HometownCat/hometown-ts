@@ -22,7 +22,7 @@ export class BoardLikeService {
   ) {}
 
   async likeStatus(boardLikeDto: BoardLikeDto, callback: ICallback) {
-    const { boardId, userId, likeStatus, id } = boardLikeDto;
+    const { boardId, userId, likeStatus } = boardLikeDto;
     try {
       if (likeStatus === 1) {
         async.waterfall(
@@ -43,6 +43,7 @@ export class BoardLikeService {
                 });
             },
             (board: BoardDto, callback: ICallback) => {
+              const { id } = board;
               if (board) {
                 this.boardLikeRepository
                   .createQueryBuilder('board')
