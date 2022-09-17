@@ -8,6 +8,7 @@ import { HttpMessage } from 'src/common/utils/errors/http-message.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from 'src/services/entities/board/board.entity';
 import { Repository } from 'typeorm';
+import * as _ from 'lodash';
 
 @Injectable()
 export class BoardService {
@@ -49,31 +50,24 @@ export class BoardService {
   }
 
   async findAll(): Promise<Board[]> {
-    // test
-    // select * from board
-    // const boards = await this.boardRepository.find({
-    //   select: [
-    //     'id',
-    //     'title',
-    //     'content',
-    //     'viewCount',
-    //     'likeCount',
-    //     'commentCount',
-    //     'createdAt',
-    //     'updatedAt',
-    //     'userId',
-    //   ],
-    //   relations: ['boardComment', 'boardImage', 'user.id = board.userId'],
+    const boards = await this.boardRepository.find({
+      select: {
+        user: { id: true },
+      },
+      relations: {
+        boardComment: true,
+        boardLike: true,
+        boardImage: true,
+        user: true,
+      },
+    });
+    // boards = _.map(boards, board => {
+    //   const {
+    //     user: { id: userId },
+    //   } = board;
+    //   return { ...board, userId };
     // });
 
-    const boards = await this.boardRepository
-      .createQueryBuilder('board')
-      .leftJoinAndSelect('board.boardImage', 'boardImage')
-      .leftJoinAndSelect('board.boardComment', 'boardComment')
-      .innerJoinAndSelect('board.user', 'user', 'user.id = board.userId')
-      .getMany();
-
-    // boards = { ...boards };
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
 

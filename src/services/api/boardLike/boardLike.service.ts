@@ -62,6 +62,22 @@ export class BoardLikeService {
                   callback(err);
                 });
             },
+            (callback: ICallback) => {
+              this.boardLikeRepository
+                .createQueryBuilder()
+                .update(BoardLike)
+                .set({
+                  likeStatus: 1,
+                })
+                .where('id = :id', { id: id })
+                .execute()
+                .then(() => {
+                  callback(null, true);
+                })
+                .catch(err => {
+                  callback(err);
+                });
+            },
           ],
           callback,
         );
@@ -94,6 +110,22 @@ export class BoardLikeService {
                 .update(BoardLike)
                 .set({
                   likeCount: () => 'likeCount + 1',
+                })
+                .where('id = :id', { id: id })
+                .execute()
+                .then(() => {
+                  callback(null, true);
+                })
+                .catch(err => {
+                  callback(err);
+                });
+            },
+            (callback: ICallback) => {
+              this.boardLikeRepository
+                .createQueryBuilder()
+                .update(BoardLike)
+                .set({
+                  likeStatus: 1,
                 })
                 .where('id = :id', { id: id })
                 .execute()

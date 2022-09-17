@@ -28,9 +28,6 @@ export class Board {
   @Column({ type: 'mediumint', name: 'commentCount', default: 0 })
   commentCount: number;
 
-  @Column({ type: 'tinyint', name: 'likeStatus', default: 0 })
-  likeStatus: number;
-
   @Column({
     type: 'timestamp',
     name: 'createdAt',
@@ -66,5 +63,5 @@ export class Board {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  userId: number;
+  user: User;
 }
