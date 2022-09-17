@@ -49,9 +49,13 @@ export class BoardController {
     @Res() res: Response,
     @Body() createBoardDto: CreateBoardDto,
   ) {
-    await this.boardService.getNewId(createBoardDto);
-    // return board;
-    response.success(res, { message: 'insert success' });
+    await this.boardService.getNewId(createBoardDto, err => {
+      if (err) {
+        response.error(res, err);
+      } else {
+        response.success(res, { message: 'insert success' });
+      }
+    });
   }
 
   @Patch('/update/:boardId')

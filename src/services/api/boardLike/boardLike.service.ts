@@ -1,3 +1,4 @@
+import { BoardDto } from './../board/dtos/board.dto';
 import { BoardLikeDto } from './dtos/boardLike.dto';
 import { Repository } from 'typeorm';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
@@ -27,18 +28,13 @@ export class BoardLikeService {
         async.waterfall(
           [
             (callback: ICallback) => {
-              Promise.all([
-                this.boardRepository.findOne({
+              this.boardRepository
+                .findOne({
                   where: {
                     id: boardId,
+                    userId: userId,
                   },
-                }),
-                this.userRepository.findOne({
-                  where: {
-                    id: userId,
-                  },
-                }),
-              ])
+                })
                 .then(() => {
                   callback(null, true);
                 })
@@ -46,28 +42,37 @@ export class BoardLikeService {
                   callback(err);
                 });
             },
-            (callback: ICallback) => {
-              this.boardLikeRepository
-                .createQueryBuilder()
-                .update(BoardLike)
-                .set({
-                  likeCount: () => 'likeCount - 1',
-                })
-                .where('id = :id', { id: id })
-                .execute()
-                .then(() => {
-                  callback(null, true);
-                })
-                .catch(err => {
-                  callback(err);
-                });
+            (board: BoardDto, callback: ICallback) => {
+              console.log(board);
+
+              if (board) {
+                this.boardLikeRepository
+                  .createQueryBuilder()
+                  .update(Board)
+                  .set({
+                    likeCount: () => 'likeCount - 1',
+                  })
+                  .where('id = :id', { id: id })
+                  .execute()
+                  .then(() => {
+                    callback(null, true);
+                  })
+                  .catch(err => {
+                    callback(err);
+                  });
+              } else {
+                throw new HttpError(
+                  HttpStatus.NOT_FOUND,
+                  HttpMessage.NOT_FOUND_BOARD,
+                );
+              }
             },
             (callback: ICallback) => {
               this.boardLikeRepository
                 .createQueryBuilder()
                 .update(BoardLike)
                 .set({
-                  likeStatus: 1,
+                  likeStatus: 0,
                 })
                 .where('id = :id', { id: id })
                 .execute()
@@ -85,18 +90,13 @@ export class BoardLikeService {
         async.waterfall(
           [
             (callback: ICallback) => {
-              Promise.all([
-                this.boardRepository.findOne({
+              this.boardRepository
+                .findOne({
                   where: {
                     id: boardId,
+                    userId: userId,
                   },
-                }),
-                this.userRepository.findOne({
-                  where: {
-                    id: userId,
-                  },
-                }),
-              ])
+                })
                 .then(() => {
                   callback(null, true);
                 })
@@ -104,21 +104,28 @@ export class BoardLikeService {
                   callback(err);
                 });
             },
-            (callback: ICallback) => {
-              this.boardLikeRepository
-                .createQueryBuilder()
-                .update(BoardLike)
-                .set({
-                  likeCount: () => 'likeCount + 1',
-                })
-                .where('id = :id', { id: id })
-                .execute()
-                .then(() => {
-                  callback(null, true);
-                })
-                .catch(err => {
-                  callback(err);
-                });
+            (board: BoardDto, callback: ICallback) => {
+              if (board) {
+                this.boardLikeRepository
+                  .createQueryBuilder()
+                  .update(Board)
+                  .set({
+                    likeCount: () => 'likeCount + 1',
+                  })
+                  .where('id = :id', { id: id })
+                  .execute()
+                  .then(() => {
+                    callback(null, true);
+                  })
+                  .catch(err => {
+                    callback(err);
+                  });
+              } else {
+                throw new HttpError(
+                  HttpStatus.NOT_FOUND,
+                  HttpMessage.NOT_FOUND_BOARD,
+                );
+              }
             },
             (callback: ICallback) => {
               this.boardLikeRepository

@@ -11,6 +11,8 @@ import { UserService } from './user.service';
 import { BoardLikeProviders } from '../boardLike/boardLike.providers';
 import { BoardLikeService } from '../boardLike/boardLike.service';
 import { BoardService } from '../board/board.service';
+import { CommentProviders } from '../boardComment/comment.providers';
+import { CommentService } from '../boardComment/comment.service';
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]), DatabaseModule],
   controllers: [UserController],
@@ -21,6 +23,8 @@ import { BoardService } from '../board/board.service';
     BoardLikeService,
     ...BoardProviders,
     BoardService,
+    ...CommentProviders,
+    CommentService,
   ],
   exports: [...UserProviders, UserService],
 })

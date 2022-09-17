@@ -1,3 +1,4 @@
+import { ICallback } from '@Src/interfaces/common/common.interface';
 import { User } from 'src/services/entities/user/user.entity';
 import { UpdateBoardDto } from './dtos/update.dto';
 import { BoardRepository } from './board.repository';
@@ -8,7 +9,10 @@ import { HttpMessage } from 'src/common/utils/errors/http-message.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from 'src/services/entities/board/board.entity';
 import { Repository } from 'typeorm';
+import * as async from 'async';
 import * as _ from 'lodash';
+import { BoardDto } from './dtos/board.dto';
+import { BoardLike } from '@Src/services/entities/board/boardLike.entity';
 
 @Injectable()
 export class BoardService {
@@ -16,6 +20,8 @@ export class BoardService {
   constructor(
     @Inject('BOARD_REPOSITORY')
     private boardRepository: Repository<Board>,
+    @Inject('BOARDLIKE_REPOSITORY')
+    private boardLikeRepository: Repository<BoardLike>,
   ) {}
   async findOne(boardId: number): Promise<Board> {
     // select * from board where id = ?
@@ -36,7 +42,9 @@ export class BoardService {
         .leftJoinAndSelect('board.boardImage', 'boardImage')
         .leftJoinAndSelect('board.boardComment', 'boardComment')
         .leftJoinAndSelect('board.boardLike', 'boardLike')
+        .leftJoinAndSelect('board.user', 'user')
         .where('board.id = (:boardId)', { boardId })
+        // .andWhere('board.userId = (:userId)', { userId })
         .getOne();
 
       if (board === undefined)
@@ -74,14 +82,48 @@ export class BoardService {
     return boards;
   }
 
-  async getNewId(createBoardDto: CreateBoardDto): Promise<Board> {
+  async getNewId(
+    createBoardDto: CreateBoardDto,
+    callback: ICallback,
+  ): Promise<Board> {
     let board = new Board();
 
     board = { ...board, ...createBoardDto };
-    console.log(board);
 
     try {
-      board = await this.boardRepository.save(board);
+      async.waterfall(
+        [
+          (callback: ICallback) => {
+            this.boardRepository
+              .save(board)
+              .then(result => {
+                callback(null, result);
+              })
+              .catch(err => {
+                callback(err);
+              });
+          },
+          (board: BoardDto, callback: ICallback) => {
+            const { id: boardId, userId } = board;
+            if (board) {
+              this.boardLikeRepository
+                .save({ boardId, userId })
+                .then(result => {
+                  callback(null, result);
+                })
+                .catch(err => {
+                  callback(err);
+                });
+            } else {
+              throw new HttpError(
+                HttpStatus.NOT_FOUND,
+                HttpMessage.NOT_FOUND_BOARD,
+              );
+            }
+          },
+        ],
+        callback,
+      );
     } catch (err) {
       throw new HttpError(HttpStatus.BAD_REQUEST, HttpMessage.FAIL_SAVE_BOARD);
     }
@@ -106,7 +148,6 @@ export class BoardService {
         throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
       else {
         board = { ...board, ...updateBoardDto };
-
         await this.boardRepository.save(board);
       }
     } catch (err) {

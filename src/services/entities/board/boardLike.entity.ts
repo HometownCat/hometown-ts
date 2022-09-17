@@ -13,9 +13,6 @@ export class BoardLike {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ type: 'int', name: 'likeCount', default: 0 })
-  likeCount: number;
-
   @Column({ type: 'tinyint', name: 'likeStatus', default: 0 })
   likeStatus: number;
 

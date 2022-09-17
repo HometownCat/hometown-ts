@@ -5,9 +5,6 @@ export class BoardLikeDto {
   id: number;
 
   @IsNumber()
-  likeCount: number;
-
-  @IsNumber()
   likeStatus: number;
 
   @IsNumber()
