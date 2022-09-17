@@ -35,19 +35,17 @@ export class BoardLikeService {
                     userId: userId,
                   },
                 })
-                .then(() => {
-                  callback(null, true);
+                .then(result => {
+                  callback(null, result);
                 })
                 .catch(err => {
                   callback(err);
                 });
             },
             (board: BoardDto, callback: ICallback) => {
-              console.log(board);
-
               if (board) {
                 this.boardLikeRepository
-                  .createQueryBuilder()
+                  .createQueryBuilder('board')
                   .update(Board)
                   .set({
                     likeCount: () => 'likeCount - 1',
@@ -67,21 +65,23 @@ export class BoardLikeService {
                 );
               }
             },
-            (callback: ICallback) => {
-              this.boardLikeRepository
-                .createQueryBuilder()
-                .update(BoardLike)
-                .set({
-                  likeStatus: 0,
-                })
-                .where('id = :id', { id: id })
-                .execute()
-                .then(() => {
-                  callback(null, true);
-                })
-                .catch(err => {
-                  callback(err);
-                });
+            (isUpdate: boolean, callback: ICallback) => {
+              if (isUpdate === true) {
+                this.boardLikeRepository
+                  .createQueryBuilder('boardLike')
+                  .update(BoardLike)
+                  .set({
+                    likeStatus: 0,
+                  })
+                  .where('boardId = (:boardId)', { boardId: boardId })
+                  .execute()
+                  .then(() => {
+                    callback(null, true);
+                  })
+                  .catch(err => {
+                    callback(err);
+                  });
+              }
             },
           ],
           callback,
@@ -97,22 +97,23 @@ export class BoardLikeService {
                     userId: userId,
                   },
                 })
-                .then(() => {
-                  callback(null, true);
+                .then(result => {
+                  callback(null, result);
                 })
                 .catch(err => {
                   callback(err);
                 });
             },
             (board: BoardDto, callback: ICallback) => {
+              const { id } = board;
               if (board) {
                 this.boardLikeRepository
-                  .createQueryBuilder()
+                  .createQueryBuilder('board')
                   .update(Board)
                   .set({
                     likeCount: () => 'likeCount + 1',
                   })
-                  .where('id = :id', { id: id })
+                  .where('id = (:id)', { id: id })
                   .execute()
                   .then(() => {
                     callback(null, true);
@@ -127,21 +128,23 @@ export class BoardLikeService {
                 );
               }
             },
-            (callback: ICallback) => {
-              this.boardLikeRepository
-                .createQueryBuilder()
-                .update(BoardLike)
-                .set({
-                  likeStatus: 1,
-                })
-                .where('id = :id', { id: id })
-                .execute()
-                .then(() => {
-                  callback(null, true);
-                })
-                .catch(err => {
-                  callback(err);
-                });
+            (isUpdate: boolean, callback: ICallback) => {
+              if (isUpdate === true) {
+                this.boardLikeRepository
+                  .createQueryBuilder('boardLike')
+                  .update(BoardLike)
+                  .set({
+                    likeStatus: 1,
+                  })
+                  .where('boardId = (:boardId)', { boardId: boardId })
+                  .execute()
+                  .then(() => {
+                    callback(null, true);
+                  })
+                  .catch(err => {
+                    callback(err);
+                  });
+              }
             },
           ],
           callback,
