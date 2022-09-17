@@ -42,14 +42,14 @@ export class BoardController {
     response.success(res, board);
   }
 
-  @Post('/set')
+  @Post('/getNewId')
   @HttpCode(201)
   async setboard(
     @Req() req: Request,
     @Res() res: Response,
     @Body() createBoardDto: CreateBoardDto,
   ) {
-    const board = await this.boardService.save(createBoardDto);
+    await this.boardService.getNewId(createBoardDto);
     // return board;
     response.success(res, { message: 'insert success' });
   }

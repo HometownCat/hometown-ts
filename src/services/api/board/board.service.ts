@@ -74,10 +74,11 @@ export class BoardService {
     return boards;
   }
 
-  async save(createBoardDto: CreateBoardDto): Promise<Board> {
+  async getNewId(createBoardDto: CreateBoardDto): Promise<Board> {
     let board = new Board();
 
-    board = { ...createBoardDto, ...board };
+    board = { ...board, ...createBoardDto };
+    console.log(board);
 
     try {
       board = await this.boardRepository.save(board);
@@ -92,15 +93,22 @@ export class BoardService {
     boardId: number,
     updateBoardDto: UpdateBoardDto,
   ): Promise<void> {
-    let board = await this.findOne(boardId);
+    const { userId } = updateBoardDto;
+    let board = await this.boardRepository.findOne({
+      where: {
+        id: boardId,
+        userId: userId,
+      },
+    });
 
     try {
-      if (board === undefined)
+      if (board === null)
         throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+      else {
+        board = { ...board, ...updateBoardDto };
 
-      board = { ...board, ...updateBoardDto };
-
-      await this.boardRepository.save(board);
+        await this.boardRepository.save(board);
+      }
     } catch (err) {
       throw new HttpError(
         HttpStatus.BAD_REQUEST,

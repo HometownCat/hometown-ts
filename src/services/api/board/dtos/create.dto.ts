@@ -17,13 +17,7 @@ export class CreateBoardDto {
   // viewCount: number;
 
   // @IsNumber()
-  // likeCount: number;
-
-  // @IsNumber()
   // commentCount: number;
-
-  // @IsNumber()
-  // likeStatus: number;
 
   // @IsDateString()
   // createdAt: Date;

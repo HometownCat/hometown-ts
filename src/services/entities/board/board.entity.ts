@@ -43,6 +43,13 @@ export class Board {
   })
   updatedAt: Date;
 
+  @ManyToOne(() => User, {
+    createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  userId: number;
+
   @OneToMany(() => BoardComment, boardComments => boardComments.boardId, {
     cascade: true,
   })
