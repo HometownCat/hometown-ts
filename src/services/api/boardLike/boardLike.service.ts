@@ -22,138 +22,171 @@ export class BoardLikeService {
   ) {}
 
   async likeStatus(boardLikeDto: BoardLikeDto, callback: ICallback) {
-    const { boardId, userId, likeStatus } = boardLikeDto;
-    try {
-      if (likeStatus === 1) {
-        async.waterfall(
-          [
-            (callback: ICallback) => {
-              this.boardRepository
-                .findOne({
-                  where: {
-                    id: boardId,
-                    userId: userId,
+    const { boardId, userId } = boardLikeDto;
+
+    async.waterfall(
+      [
+        callback => callback(null, { boardId, userId }),
+        (boardLikeDto: BoardLikeDto, callback: ICallback) => {
+          const { boardId, userId } = boardLikeDto;
+
+          this.boardLikeRepository
+            .findOne({
+              where: {
+                boardId: boardId,
+                userId: userId,
+              },
+            })
+            .then(result => {
+              callback(null, result);
+            })
+            .catch(err => {
+              console.log(err);
+
+              callback(err);
+            });
+        },
+        (boardLikeDto: BoardLikeDto, callback: ICallback) => {
+          const { likeStatus } = boardLikeDto;
+
+          try {
+            if (likeStatus === 1) {
+              async.waterfall(
+                [
+                  (callback: ICallback) => {
+                    this.boardRepository
+                      .findOne({
+                        where: {
+                          id: boardId,
+                          userId: userId,
+                        },
+                      })
+                      .then(result => {
+                        callback(null, result);
+                      })
+                      .catch(err => {
+                        callback(err);
+                      });
                   },
-                })
-                .then(result => {
-                  callback(null, result);
-                })
-                .catch(err => {
-                  callback(err);
-                });
-            },
-            (board: BoardDto, callback: ICallback) => {
-              const { id } = board;
-              if (board) {
-                this.boardLikeRepository
-                  .createQueryBuilder('board')
-                  .update(Board)
-                  .set({
-                    likeCount: () => 'likeCount - 1',
-                  })
-                  .where('id = :id', { id: id })
-                  .execute()
-                  .then(() => {
-                    callback(null, true);
-                  })
-                  .catch(err => {
-                    callback(err);
-                  });
-              } else {
-                throw new HttpError(
-                  HttpStatus.NOT_FOUND,
-                  HttpMessage.NOT_FOUND_BOARD,
-                );
-              }
-            },
-            (isUpdate: boolean, callback: ICallback) => {
-              if (isUpdate === true) {
-                this.boardLikeRepository
-                  .createQueryBuilder('boardLike')
-                  .update(BoardLike)
-                  .set({
-                    likeStatus: 0,
-                  })
-                  .where('boardId = (:boardId)', { boardId: boardId })
-                  .execute()
-                  .then(() => {
-                    callback(null, true);
-                  })
-                  .catch(err => {
-                    callback(err);
-                  });
-              }
-            },
-          ],
-          callback,
-        );
-      } else if (likeStatus === 0) {
-        async.waterfall(
-          [
-            (callback: ICallback) => {
-              this.boardRepository
-                .findOne({
-                  where: {
-                    id: boardId,
-                    userId: userId,
+                  (board: BoardDto, callback: ICallback) => {
+                    const { id } = board;
+                    if (board) {
+                      this.boardLikeRepository
+                        .createQueryBuilder('board')
+                        .update(Board)
+                        .set({
+                          likeCount: () => 'likeCount - 1',
+                        })
+                        .where('id = :id', { id: id })
+                        .execute()
+                        .then(() => {
+                          callback(null, true);
+                        })
+                        .catch(err => {
+                          callback(err);
+                        });
+                    } else {
+                      throw new HttpError(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.NOT_FOUND_BOARD,
+                      );
+                    }
                   },
-                })
-                .then(result => {
-                  callback(null, result);
-                })
-                .catch(err => {
-                  callback(err);
-                });
-            },
-            (board: BoardDto, callback: ICallback) => {
-              const { id } = board;
-              if (board) {
-                this.boardLikeRepository
-                  .createQueryBuilder('board')
-                  .update(Board)
-                  .set({
-                    likeCount: () => 'likeCount + 1',
-                  })
-                  .where('id = (:id)', { id: id })
-                  .execute()
-                  .then(() => {
-                    callback(null, true);
-                  })
-                  .catch(err => {
-                    callback(err);
-                  });
-              } else {
-                throw new HttpError(
-                  HttpStatus.NOT_FOUND,
-                  HttpMessage.NOT_FOUND_BOARD,
-                );
-              }
-            },
-            (isUpdate: boolean, callback: ICallback) => {
-              if (isUpdate === true) {
-                this.boardLikeRepository
-                  .createQueryBuilder('boardLike')
-                  .update(BoardLike)
-                  .set({
-                    likeStatus: 1,
-                  })
-                  .where('boardId = (:boardId)', { boardId: boardId })
-                  .execute()
-                  .then(() => {
-                    callback(null, true);
-                  })
-                  .catch(err => {
-                    callback(err);
-                  });
-              }
-            },
-          ],
-          callback,
-        );
-      }
-    } catch (err) {
-      console.log(err);
-      throw new HttpError(HttpStatus.BAD_REQUEST, HttpMessage.FAIL_UPDATE_LIKE);
-    }
+                  (isUpdate: boolean, callback: ICallback) => {
+                    if (isUpdate === true) {
+                      this.boardLikeRepository
+                        .createQueryBuilder('boardLike')
+                        .update(BoardLike)
+                        .set({
+                          likeStatus: 0,
+                        })
+                        .where('boardId = (:boardId)', { boardId: boardId })
+                        .execute()
+                        .then(() => {
+                          callback(null, 'down');
+                        })
+                        .catch(err => {
+                          callback(err);
+                        });
+                    }
+                  },
+                ],
+                callback,
+              );
+            } else if (likeStatus === 0) {
+              async.waterfall(
+                [
+                  (callback: ICallback) => {
+                    this.boardRepository
+                      .findOne({
+                        where: {
+                          id: boardId,
+                          userId: userId,
+                        },
+                      })
+                      .then(result => {
+                        callback(null, result);
+                      })
+                      .catch(err => {
+                        callback(err);
+                      });
+                  },
+                  (board: BoardDto, callback: ICallback) => {
+                    const { id } = board;
+                    if (board) {
+                      this.boardLikeRepository
+                        .createQueryBuilder('board')
+                        .update(Board)
+                        .set({
+                          likeCount: () => 'likeCount + 1',
+                        })
+                        .where('id = (:id)', { id: id })
+                        .execute()
+                        .then(() => {
+                          callback(null, true);
+                        })
+                        .catch(err => {
+                          callback(err);
+                        });
+                    } else {
+                      throw new HttpError(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.NOT_FOUND_BOARD,
+                      );
+                    }
+                  },
+                  (isUpdate: boolean, callback: ICallback) => {
+                    if (isUpdate === true) {
+                      this.boardLikeRepository
+                        .createQueryBuilder('boardLike')
+                        .update(BoardLike)
+                        .set({
+                          likeStatus: 1,
+                        })
+                        .where('boardId = (:boardId)', { boardId: boardId })
+                        .execute()
+                        .then(() => {
+                          callback(null, 'up');
+                        })
+                        .catch(err => {
+                          callback(err);
+                        });
+                    }
+                  },
+                ],
+                callback,
+              );
+            }
+          } catch (err) {
+            console.log(err);
+            throw new HttpError(
+              HttpStatus.BAD_REQUEST,
+              HttpMessage.FAIL_UPDATE_LIKE,
+            );
+          }
+        },
+      ],
+      callback,
+    );
   }
 }

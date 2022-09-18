@@ -26,25 +26,18 @@ export class BoardLikeController {
     @Res() res: Response,
     @Body() boardLikeDto: BoardLikeDto,
   ) {
-    const { likeStatus } = boardLikeDto;
-    if (likeStatus === 1) {
-      await this.boardLikeService.likeStatus(boardLikeDto, err => {
-        if (err) {
-          response.error(res, err);
-        } else {
-          response.success(res, { message: 'like down' });
-        }
-      });
-    } else if (likeStatus === 0) {
-      await this.boardLikeService.likeStatus(boardLikeDto, err => {
-        if (err) {
-          response.error(res, err);
-        } else {
+    await this.boardLikeService.likeStatus(boardLikeDto, (err, result) => {
+      if (err) {
+        response.error(res, err);
+      } else if (result) {
+        if (result === 'up') {
           response.success(res, { message: 'like up' });
+        } else if (result === 'down') {
+          response.success(res, { message: 'like down' });
+        } else {
+          response.error(res, 'Not Found like task result');
         }
-      });
-    } else {
-      response.notFound('Not found LikeStatus');
-    }
+      }
+    });
   }
 }
