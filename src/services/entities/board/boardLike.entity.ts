@@ -44,4 +44,17 @@ export class BoardLike {
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   userId: number;
+  @ManyToOne(() => Board, {
+    createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'boardId', referencedColumnName: 'id' })
+  board: Board;
+
+  @ManyToOne(() => User, {
+    createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  user: User;
 }

@@ -1,4 +1,4 @@
-import { IsNumber } from 'class-validator';
+import { IsDateString, IsNumber } from 'class-validator';
 
 export class BoardLikeDto {
   @IsNumber()
@@ -6,6 +6,12 @@ export class BoardLikeDto {
 
   @IsNumber()
   likeStatus: number;
+
+  @IsDateString()
+  createdAt: Date;
+
+  @IsDateString()
+  updatedAt: Date;
 
   @IsNumber()
   boardId: number;

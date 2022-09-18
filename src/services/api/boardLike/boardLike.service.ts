@@ -31,20 +31,44 @@ export class BoardLikeService {
           const { boardId, userId } = boardLikeDto;
 
           this.boardLikeRepository
-            .findOne({
-              where: {
-                boardId: boardId,
-                userId: userId,
-              },
-            })
+            .createQueryBuilder('boardLike')
+            .where('boardId = (:boardId)', { boardId: boardId })
+            .andWhere('userId = (:userId)', { userId: userId })
+            .getOne()
             .then(result => {
-              callback(null, result);
+              const returnData = { boardId, userId, ...result };
+              callback(null, returnData);
             })
             .catch(err => {
               console.log(err);
 
               callback(err);
             });
+        },
+        (boardLikeDto: BoardLikeDto, callback: ICallback) => {
+          const { boardId, userId } = boardLikeDto;
+          let { likeStatus } = boardLikeDto;
+
+          if (typeof likeStatus !== 'undefined') {
+            callback(null, boardLikeDto);
+          } else {
+            const saveData = {
+              ...boardLikeDto,
+              likeStatus: 0,
+              boardId,
+              userId,
+            };
+
+            this.boardLikeRepository
+              .save(saveData)
+              .then(() => {
+                likeStatus = 0;
+                callback(null, { boardId, userId, likeStatus });
+              })
+              .catch(err => {
+                callback(err);
+              });
+          }
         },
         (boardLikeDto: BoardLikeDto, callback: ICallback) => {
           const { likeStatus } = boardLikeDto;
