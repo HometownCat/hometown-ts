@@ -1,3 +1,4 @@
+import { BoardLikeDto } from './../boardLike/dtos/boardLike.dto';
 import { ICallback } from '@Src/interfaces/common/common.interface';
 import { User } from 'src/services/entities/user/user.entity';
 import { UpdateBoardDto } from './dtos/update.dto';
@@ -23,34 +24,101 @@ export class BoardService {
     @Inject('BOARDLIKE_REPOSITORY')
     private boardLikeRepository: Repository<BoardLike>,
   ) {}
-  async findOne(boardId: number): Promise<Board> {
-    // select * from board where id = ?
+  async findOne(boardId: number, boardDto: BoardDto, callback: ICallback) {
+    const { userId } = boardDto;
+
     try {
       // 조회 수 증가
-      await this.boardRepository
-        .createQueryBuilder()
-        .update(Board)
-        .set({
-          viewCount: () => 'viewCount + 1',
-        })
-        .where('id = :boardId', { boardId: boardId })
-        .execute();
+      async.waterfall(
+        [
+          callback => callback(null, { boardId, userId }),
+          (boardDto: BoardDto, callback: ICallback) => {
+            const { id: boardId, userId } = boardDto;
 
-      // 게시글 조회
-      const board = await this.boardRepository
-        .createQueryBuilder('board')
-        .leftJoinAndSelect('board.boardImage', 'boardImage')
-        .leftJoinAndSelect('board.boardComment', 'boardComment')
-        .leftJoinAndSelect('board.boardLike', 'boardLike')
-        .leftJoinAndSelect('board.user', 'user')
-        .where('board.id = (:boardId)', { boardId })
-        // .andWhere('board.userId = (:userId)', { userId })
-        .getOne();
+            this.boardRepository
+              .createQueryBuilder('board')
+              .update(Board)
+              .set({
+                viewCount: () => 'viewCount + 1',
+              })
+              .where('id = (:id)', { id: boardId })
+              .execute()
+              .then(() => {
+                callback(null, boardDto);
+              })
+              .catch(err => {
+                console.log(err);
 
-      if (board === undefined)
-        throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+                callback(err);
+              });
+          },
+          ({ boardId, userId }, callback: ICallback) => {
+            this.boardRepository
+              .createQueryBuilder('board')
+              .leftJoinAndSelect('board.boardImage', 'boardImage')
+              .leftJoinAndSelect('board.boardComment', 'boardComment')
+              .leftJoinAndSelect('board.boardLike', 'boardLike')
+              .where('board.id = (:id)', { id: boardId })
+              .getOne()
+              .then(result => {
+                if (result === null)
+                  throw new HttpError(
+                    HttpStatus.NOT_FOUND,
+                    HttpMessage.NOT_FOUND_BOARD,
+                  );
 
-      return board;
+                const { boardLike, id: boardId } = result;
+
+                if (boardLike.length > 0) {
+                  callback(null, result);
+                } else {
+                  this.boardLikeRepository
+                    .save({ boardId, userId })
+                    .then(saveData => {
+                      const returnData = { ...result, boardLike: saveData };
+                      callback(null, returnData);
+                    })
+                    .catch(err => {
+                      console.log(err);
+
+                      callback(err);
+                    });
+                }
+              })
+              .catch(err => {
+                console.log(err);
+
+                callback(err);
+              });
+          },
+          // (boardLikeDto: BoardLikeDto, callback: ICallback) => {
+          //   const { boardId, userId } = boardLikeDto;
+          //   let { likeStatus } = boardLikeDto;
+
+          //   if (typeof likeStatus !== 'undefined') {
+          //     callback(null, boardLikeDto);
+          //   } else {
+          //     const saveData = {
+          //       ...boardLikeDto,
+          //       likeStatus: 0,
+          //       boardId,
+          //       userId,
+          //     };
+
+          //     this.boardLikeRepository
+          //       .save(saveData)
+          //       .then(() => {
+          //         likeStatus = 0;
+          //         callback(null, { boardId, userId, likeStatus });
+          //       })
+          //       .catch(err => {
+          //         callback(err);
+          //       });
+          //   }
+          // },
+        ],
+        callback,
+      );
     } catch (err) {
       console.log(err);
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
@@ -160,7 +228,9 @@ export class BoardService {
   }
 
   async deleteOne(boardId: number): Promise<Board> {
-    const board = await this.findOne(boardId);
+    const board = await this.boardRepository.findOne({
+      where: { id: boardId },
+    });
 
     if (board === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);

@@ -16,6 +16,7 @@ import { Board } from 'src/services/entities/board/board.entity';
 import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
 import { UpdateBoardDto } from './dtos/update.dto';
+import { BoardDto } from './dtos/board.dto';
 
 @Controller('board')
 export class BoardController {
@@ -29,17 +30,23 @@ export class BoardController {
     response.success(res, boards);
   }
 
-  @Get('/:id')
+  @Post('/:id')
   @HttpCode(200)
   async findOneboard(
     @Req() req: Request,
     @Res() res: Response,
     @Param('id') boardId: number,
+    @Body() boardDto: BoardDto,
   ) {
-    const board = await this.boardService.findOne(boardId);
+    await this.boardService.findOne(boardId, boardDto, (err, result) => {
+      if (err) {
+        response.error(res, err);
+      } else {
+        response.success(res, result);
+      }
+    });
     // const data: Board = { ...board };
     // return board;
-    response.success(res, board);
   }
 
   @Post('/getNewId')
