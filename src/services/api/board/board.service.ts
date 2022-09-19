@@ -24,41 +24,41 @@ export class BoardService {
     @Inject('BOARDLIKE_REPOSITORY')
     private boardLikeRepository: Repository<BoardLike>,
   ) {}
-  async findOne(boardId: number, boardDto: BoardDto, callback: ICallback) {
+  async findOne(id: number, boardDto: BoardDto, callback: ICallback) {
     const { userId } = boardDto;
 
     try {
       // 조회 수 증가
       async.waterfall(
         [
-          callback => callback(null, { boardId, userId }),
+          callback => callback(null, { id, userId }),
           (boardDto: BoardDto, callback: ICallback) => {
-            const { id: boardId, userId } = boardDto;
+            const { id } = boardDto;
 
             this.boardRepository
-              .createQueryBuilder('board')
+              .createQueryBuilder()
               .update(Board)
               .set({
                 viewCount: () => 'viewCount + 1',
               })
-              .where('id = (:id)', { id: boardId })
+              .where('id = :id', { id: id })
               .execute()
               .then(() => {
                 callback(null, boardDto);
               })
               .catch(err => {
                 console.log(err);
-
                 callback(err);
               });
           },
-          ({ boardId, userId }, callback: ICallback) => {
+          ({ id, userId }, callback: ICallback) => {
             this.boardRepository
               .createQueryBuilder('board')
               .leftJoinAndSelect('board.boardImage', 'boardImage')
               .leftJoinAndSelect('board.boardComment', 'boardComment')
               .leftJoinAndSelect('board.boardLike', 'boardLike')
-              .where('board.id = (:id)', { id: boardId })
+              .where('board.id = (:id)', { id: id })
+              .andWhere('board.userId = (:userId)', { userId: userId })
               .getOne()
               .then(result => {
                 if (result === null)
@@ -67,15 +67,23 @@ export class BoardService {
                     HttpMessage.NOT_FOUND_BOARD,
                   );
 
-                const { boardLike, id: boardId } = result;
+                const { boardLike: like, id: boardId } = result;
 
-                if (boardLike.length > 0) {
-                  callback(null, result);
+                if (like.length > 0) {
+                  const boardLike = like[0];
+                  const returnData = {
+                    ...result,
+                    boardLike: { ...boardLike, userId },
+                  };
+                  callback(null, returnData);
                 } else {
                   this.boardLikeRepository
                     .save({ boardId, userId })
                     .then(saveData => {
-                      const returnData = { ...result, boardLike: saveData };
+                      const returnData = {
+                        ...result,
+                        boardLike: { ...saveData, userId },
+                      };
                       callback(null, returnData);
                     })
                     .catch(err => {
