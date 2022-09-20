@@ -22,6 +22,25 @@ import { BoardDto } from './dtos/board.dto';
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
+  @Post('/getNewId')
+  @HttpCode(201)
+  async setBoard(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() createBoardDto: CreateBoardDto,
+  ) {
+    // await this.boardService.getNewId(createBoardDto, err => {
+    //   if (err) {
+    //     response.error(res, err);
+    //   } else {
+    //     response.success(res, { message: 'insert success' });
+    //   }
+    // });
+
+    await this.boardService.getNewId(createBoardDto);
+    response.success(res, { message: 'insert success' });
+  }
+
   @Get('/list')
   @HttpCode(200)
   async findAll(@Req() req: Request, @Res() res: Response) {
@@ -47,22 +66,6 @@ export class BoardController {
     });
     // const data: Board = { ...board };
     // return board;
-  }
-
-  @Post('/getNewId')
-  @HttpCode(201)
-  async setboard(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() createBoardDto: CreateBoardDto,
-  ) {
-    await this.boardService.getNewId(createBoardDto, err => {
-      if (err) {
-        response.error(res, err);
-      } else {
-        response.success(res, { message: 'insert success' });
-      }
-    });
   }
 
   @Patch('/update/:boardId')
