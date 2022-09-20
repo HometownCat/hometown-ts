@@ -13,17 +13,20 @@ export class CreateBoardDto {
   @IsString()
   content: string;
 
-  // @IsNumber()
-  // viewCount: number;
+  @IsNumber()
+  viewCount: number;
 
-  // @IsNumber()
-  // commentCount: number;
+  @IsNumber()
+  likeCount: number;
 
-  // @IsDateString()
-  // createdAt: Date;
+  @IsNumber()
+  commentCount: number;
 
-  // @IsDateString()
-  // updatedAt: Date;
+  @IsDateString()
+  createdAt: Date;
+
+  @IsDateString()
+  updatedAt: Date;
 
   @IsNumber()
   userId: number;

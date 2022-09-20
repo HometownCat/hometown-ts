@@ -26,7 +26,6 @@ export class BoardService {
   ) {}
   async findOne(id: number, boardDto: BoardDto, callback: ICallback) {
     const { userId } = boardDto;
-
     try {
       // 조회 수 증가
       async.waterfall(
@@ -99,31 +98,6 @@ export class BoardService {
                 callback(err);
               });
           },
-          // (boardLikeDto: BoardLikeDto, callback: ICallback) => {
-          //   const { boardId, userId } = boardLikeDto;
-          //   let { likeStatus } = boardLikeDto;
-
-          //   if (typeof likeStatus !== 'undefined') {
-          //     callback(null, boardLikeDto);
-          //   } else {
-          //     const saveData = {
-          //       ...boardLikeDto,
-          //       likeStatus: 0,
-          //       boardId,
-          //       userId,
-          //     };
-
-          //     this.boardLikeRepository
-          //       .save(saveData)
-          //       .then(() => {
-          //         likeStatus = 0;
-          //         callback(null, { boardId, userId, likeStatus });
-          //       })
-          //       .catch(err => {
-          //         callback(err);
-          //       });
-          //   }
-          // },
         ],
         callback,
       );
@@ -134,7 +108,7 @@ export class BoardService {
   }
 
   async findAll(): Promise<Board[]> {
-    const boards = await this.boardRepository.find({
+    let boards = await this.boardRepository.find({
       select: {
         user: { id: true },
       },
@@ -145,12 +119,11 @@ export class BoardService {
         user: true,
       },
     });
-    // boards = _.map(boards, board => {
-    //   const {
-    //     user: { id: userId },
-    //   } = board;
-    //   return { ...board, userId };
-    // });
+    boards = _.map(boards, board => {
+      const { boardLike } = board;
+      const like = boardLike[0];
+      return { ...board, boardLike: like };
+    });
 
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
@@ -160,46 +133,14 @@ export class BoardService {
 
   async getNewId(
     createBoardDto: CreateBoardDto,
-    callback: ICallback,
+    // callback: ICallback,
   ): Promise<Board> {
     let board = new Board();
 
     board = { ...board, ...createBoardDto };
 
     try {
-      async.waterfall(
-        [
-          (callback: ICallback) => {
-            this.boardRepository
-              .save(board)
-              .then(result => {
-                callback(null, result);
-              })
-              .catch(err => {
-                callback(err);
-              });
-          },
-          (board: BoardDto, callback: ICallback) => {
-            const { id: boardId, userId } = board;
-            if (board) {
-              this.boardLikeRepository
-                .save({ boardId, userId })
-                .then(result => {
-                  callback(null, result);
-                })
-                .catch(err => {
-                  callback(err);
-                });
-            } else {
-              throw new HttpError(
-                HttpStatus.NOT_FOUND,
-                HttpMessage.NOT_FOUND_BOARD,
-              );
-            }
-          },
-        ],
-        callback,
-      );
+      board = await this.boardRepository.save(board);
     } catch (err) {
       throw new HttpError(HttpStatus.BAD_REQUEST, HttpMessage.FAIL_SAVE_BOARD);
     }
