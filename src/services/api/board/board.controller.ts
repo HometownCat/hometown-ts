@@ -41,7 +41,7 @@ export class BoardController {
     response.success(res, { message: 'insert success' });
   }
 
-  @Get('/list')
+  @Get('/feed')
   @HttpCode(200)
   async findAll(@Req() req: Request, @Res() res: Response) {
     const boards = await this.boardService.findAll();

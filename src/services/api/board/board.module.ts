@@ -12,6 +12,8 @@ import { BoardLikeProviders } from '../boardLike/boardLike.providers';
 import { BoardLikeService } from '../boardLike/boardLike.service';
 import { UserProviders } from '../user/user.providers';
 import { UserService } from '../user/user.service';
+import { AuthProviders } from '@Src/auth/auth.providers';
+import { AuthService } from '@Src/auth/auth.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([BoardRepository]), DatabaseModule],
@@ -25,6 +27,8 @@ import { UserService } from '../user/user.service';
     BoardLikeService,
     ...UserProviders,
     UserService,
+    ...AuthProviders,
+    AuthService,
   ],
   exports: [...BoardProviders, BoardService],
 })
