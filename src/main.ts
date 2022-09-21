@@ -1,6 +1,6 @@
 import * as morgan from 'morgan';
 
-import { ValidationPipe } from '@nestjs/common';
+// import { ValidationPipe } from './../pipe/validationPipe';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -12,6 +12,7 @@ import { setupSwagger } from './config/swagger/setup';
 import * as compression from 'compression';
 import * as requestIp from 'request-ip';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -25,6 +26,15 @@ async function bootstrap() {
       skipMissingProperties: true,
     }),
   );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //     // forbidNonWhitelisted: true,
+  //     transform: true,
+  //     skipMissingProperties: true,
+  //   }),
+  // );
+
   // CORS
   app.enableCors();
 

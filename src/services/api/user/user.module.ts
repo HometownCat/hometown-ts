@@ -13,6 +13,8 @@ import { BoardLikeService } from '../boardLike/boardLike.service';
 import { BoardService } from '../board/board.service';
 import { CommentProviders } from '../boardComment/comment.providers';
 import { CommentService } from '../boardComment/comment.service';
+import { AuthProviders } from '@Src/auth/auth.providers';
+import { AuthService } from '@Src/auth/auth.service';
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]), DatabaseModule],
   controllers: [UserController],
@@ -25,6 +27,8 @@ import { CommentService } from '../boardComment/comment.service';
     BoardService,
     ...CommentProviders,
     CommentService,
+    ...AuthProviders,
+    AuthService,
   ],
   exports: [...UserProviders, UserService],
 })

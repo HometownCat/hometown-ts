@@ -42,6 +42,12 @@ export class User {
   })
   createdAt: Date;
 
+  @Column()
+  accessToken: string;
+
+  @Column()
+  revokeToken: string;
+
   @Column({
     type: 'timestamp',
     name: 'updatedAt',

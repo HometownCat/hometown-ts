@@ -1,6 +1,7 @@
+import { CreateUserDto } from './dtos/create.dto';
 import * as bcrypt from 'bcrypt';
 import HttpError from 'src/common/exceptions/http.exception';
-
+import * as uuid from 'uuid';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 // import { CreateUserDto } from './dtos/create-user.dto';
@@ -20,5 +21,35 @@ export class UserService {
     const users = await this.userRepository.find();
 
     return users;
+  }
+
+  async signUp(createUserDto: CreateUserDto) {
+    const { email, username, password } = createUserDto;
+    await this.checkUserExists(email);
+
+    const signupVerifyToken = uuid.v1();
+
+    await this.saveUser(username, email, password, signupVerifyToken);
+    await this.sendMemberJoinEmail(email, signupVerifyToken);
+  }
+
+  private checkUserExists(email: string) {
+    return false; // TODO: DB 연동 후 구현
+  }
+
+  private saveUser(
+    username: string,
+    email: string,
+    password: string,
+    signupVerifyToken: string,
+  ) {
+    return; // TODO: DB 연동 후 구현
+  }
+
+  private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
+    // await this.emailService.sendMemberJoinVerification(
+    //   email,
+    //   signupVerifyToken,
+    // );
   }
 }
