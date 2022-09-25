@@ -13,9 +13,31 @@ import * as compression from 'compression';
 import * as requestIp from 'request-ip';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as hpp from 'hpp';
+import * as dotenv from 'dotenv';
+import * as helmet from 'helmet';
+import * as cors from 'cors';
+
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  const prod = process.env.NODE_ENV === 'production';
+  if (prod) {
+    app.enable('trust proxy');
+    app.use(morgan('combined'));
+    // app.use(helmet({ contentSecurityPolicy: false }));
+    app.use(hpp());
+  } else {
+    app.use(morgan('dev'));
+    app.use(
+      cors({
+        origin: true,
+        credentials: true,
+      }),
+    );
+  }
 
   app.use(compression());
   app.useGlobalPipes(
@@ -36,7 +58,7 @@ async function bootstrap() {
   // );
 
   // CORS
-  app.enableCors();
+  // app.enableCors();
 
   // client ip
   app.use(requestIp.mw());
