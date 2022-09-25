@@ -1,9 +1,11 @@
+import { ICallback } from './../../../interfaces/common/common.interface';
 import { CreateUserDto } from './dtos/create.dto';
 import * as bcrypt from 'bcrypt';
 import HttpError from 'src/common/exceptions/http.exception';
 import * as uuid from 'uuid';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-
+import * as async from 'async';
+import * as _ from 'lodash';
 // import { CreateUserDto } from './dtos/create-user.dto';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,6 +25,33 @@ export class UserService {
     const users = await this.userRepository.find();
 
     return users;
+  }
+
+  async findOne(userId: number, callback: ICallback) {
+    async.waterfall(
+      [
+        callback => callback(null, userId),
+        (userId, callback: ICallback) => {
+          this.userRepository
+            .findOne({
+              where: {
+                id: userId,
+              },
+              relations: {
+                board: true,
+              },
+            })
+            .then(result => {
+              callback(null, result);
+            })
+            .catch(err => {
+              console.log(err);
+              callback(err);
+            });
+        },
+      ],
+      callback,
+    );
   }
 
   async signUp(createUserDto: CreateUserDto) {

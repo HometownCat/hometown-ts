@@ -29,6 +29,15 @@ export class User {
   })
   password: string;
 
+  @Column({ type: 'mediumtext', name: 'address' })
+  address: string;
+
+  @Column({ type: 'varchar', name: 'phoneNumber' })
+  phoneNumber: string;
+
+  @Column({ type: 'text', name: 'profileImage' })
+  profileImage: string;
+
   @Column({ type: 'varchar', name: 'userIp', length: 20, nullable: false })
   userIp: string;
 
@@ -42,11 +51,11 @@ export class User {
   })
   createdAt: Date;
 
-  @Column()
-  accessToken: string;
+  // @Column()
+  // accessToken: string;
 
-  @Column()
-  revokeToken: string;
+  // @Column()
+  // revokeToken: string;
 
   @Column({
     type: 'timestamp',

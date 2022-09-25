@@ -13,8 +13,8 @@ export class AuthService {
     @Inject('AUTH_REPOSITORY')
     private authRepository: Repository<User>,
   ) {}
-  async findAll(): Promise<Auth[]> {
-    const auth = await this.authRepository.find();
-    return auth;
-  }
+  // async findAll(): Promise<Auth[]> {
+  //   const auth = await this.authRepository.find();
+  //   return auth;
+  // }
 }
