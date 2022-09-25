@@ -108,22 +108,21 @@ export class BoardService {
   }
 
   async findAll(): Promise<Board[]> {
-    let boards = await this.boardRepository.find({
+    const boards = await this.boardRepository.find({
       select: {
-        user: { id: true },
+        user: { id: true, username: true, status: true },
       },
       relations: {
         boardComment: true,
-        boardLike: true,
         boardImage: true,
         user: true,
       },
     });
-    boards = _.map(boards, board => {
-      const { boardLike } = board;
-      const like = boardLike[0];
-      return { ...board, boardLike: like };
-    });
+    // boards = _.map(boards, board => {
+    //   const { boardLike } = board;
+    //   const like = boardLike[0];
+    //   return { ...board, boardLike: like };
+    // });
 
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
@@ -199,5 +198,33 @@ export class BoardService {
     }
 
     return board;
+  }
+
+  async ranking(): Promise<Board[]> {
+    let boards = await this.boardRepository.find({
+      select: {
+        user: { id: true },
+      },
+      relations: {
+        boardComment: true,
+        boardLike: true,
+        boardImage: true,
+        user: true,
+      },
+      order: {
+        likeCount: 'DESC',
+      },
+      take: 5,
+    });
+    boards = _.map(boards, board => {
+      const { boardLike } = board;
+      const like = boardLike[0];
+      return { ...board, boardLike: like };
+    });
+
+    if (boards === undefined)
+      throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+
+    return boards;
   }
 }

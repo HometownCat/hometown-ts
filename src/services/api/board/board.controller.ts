@@ -87,4 +87,11 @@ export class BoardController {
 
     response.success(res, { message: 'delete success' });
   }
+
+  @Get('/ranking')
+  @HttpCode(200)
+  async ranking(@Res() res: Response, @Req() req: Request) {
+    const ranking = await this.boardService.ranking();
+    response.success(res, ranking);
+  }
 }
