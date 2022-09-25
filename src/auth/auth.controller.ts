@@ -10,4 +10,6 @@ export class AuthController {
   // async findAll(): Promise<Auth[]> {
   //   // return await this.authService.findAll();
   // }
+
+  // test
 }
