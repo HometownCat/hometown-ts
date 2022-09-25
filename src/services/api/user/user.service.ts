@@ -38,7 +38,9 @@ export class UserService {
                 id: userId,
               },
               relations: {
-                board: true,
+                board: {
+                  boardImage: true,
+                },
               },
             })
             .then(result => {
