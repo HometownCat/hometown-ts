@@ -38,10 +38,6 @@ dotenv.config();
         database: process.env.MYSQL_DATABASE,
         synchronize: false,
         entities: [join(__dirname + '/**/*.entity{.ts,.js}')],
-        // entities:
-        //   process.env.NODEMON_START === 'TRUE'
-        //     ? ['src/api/entities/**/*.entity{.js,.ts}']
-        //     : ['dist/api/entities/**/*.entity{.js,.ts}'],
         namingStrategy: new SnakeNamingStrategy(),
         keepConnectionAlive: true,
         logging: ['error'],
