@@ -1,12 +1,12 @@
 import { ConfigService } from 'src/config/config.service';
 import * as winston from 'winston';
-
+import * as _ from 'lodash';
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { ICallback } from '@Src/interfaces/common/common.interface';
 import { CloudWatchTool } from '@Src/common/tools/cloudWatch.tool';
 import { CommonConstant } from '@Src/common/constant/common.constant';
-
+import { v4 as uuidV4 } from 'uuid';
 @Injectable()
 export class LoggerService extends ConsoleLogger {
   private readonly logger: winston.Logger;
@@ -30,10 +30,20 @@ export class LoggerService extends ConsoleLogger {
     callback: ICallback,
   ) {
     const option = this.constant.getCloudWatchOption();
+    const logRequest = this.constant.getLogRequestList();
+    const sendLogs = {
+      uuid: uuidV4(),
+      headers: req.headers,
+    };
+
+    _.forEach(logRequest, (key: string) => {
+      sendLogs[key] = req[key];
+    });
+
     this.cloudWatchTool.log(
       option.logGroups.backend,
       option.logStreams[type],
-      message,
+      logRequest,
       callback,
     );
   }
