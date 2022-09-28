@@ -6,18 +6,19 @@ import { DescribeLogStreamsResponse } from 'aws-sdk/clients/cloudwatchlogs';
 import * as _ from 'lodash';
 import * as async from 'async';
 import { ICallback } from '@Src/interfaces/common/common.interface';
+import { CommonConstant } from '@Src/common/constant/common.constant';
 
 dotenv.config();
 
 @Injectable()
 export class CloudWatchTool {
   private cloudWatchLogs: AWS.CloudWatchLogs;
-  constructor() {
+  constructor(private readonly constant: CommonConstant) {
     AWS.config.credentials = new AWS.SharedIniFileCredentials({
       profile: process.env.AWS_PROFILE,
     });
     this.cloudWatchLogs = new AWS.CloudWatchLogs({
-      region: 'ap-northeast-2',
+      region: constant.getAwsRegions().seoul,
     });
   }
 
