@@ -34,6 +34,7 @@ export class LoggerService extends ConsoleLogger {
     const sendLogs = {
       uuid: uuidV4(),
       headers: req.headers,
+      message,
     };
 
     _.forEach(logRequest, (key: string) => {
