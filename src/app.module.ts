@@ -21,6 +21,8 @@ import { AuthModule } from './auth/auth.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CommentModule } from './services/api/boardComment/comment.module';
 import { LikeModule } from './services/api/boardLike/boardLike.module';
+import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
+import { LoggerModule } from './common/utils/logger/logger.module';
 
 dotenv.config();
 
@@ -50,8 +52,14 @@ dotenv.config();
     CommentModule,
     CategoryModule,
     AuthModule,
+    LoggerModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
