@@ -1,4 +1,5 @@
-import { Logger, Module } from '@nestjs/common';
+import { ParamsInitMiddleware } from './../middlewares/paramsInit.middleware';
+import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -23,6 +24,7 @@ import { CommentModule } from './services/api/boardComment/comment.module';
 import { LikeModule } from './services/api/boardLike/boardLike.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { LoggerModule } from './common/utils/logger/logger.module';
+import { ValidationMiddleware } from 'middlewares/validation.middleware';
 
 dotenv.config();
 
@@ -62,4 +64,9 @@ dotenv.config();
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    // x-api-key validation
+    consumer.apply(ValidationMiddleware).forRoutes('*');
+  }
+}
