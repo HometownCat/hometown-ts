@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../user/user.entity';
 import { Board } from './board.entity';
 
 @Entity({ name: 'boardComment' })
@@ -39,4 +40,11 @@ export class BoardComment {
   })
   @JoinColumn({ name: 'boardId', referencedColumnName: 'id' })
   boardId: Board;
+
+  @ManyToOne(() => User, {
+    createForeignKeyConstraints: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  userId: Board;
 }

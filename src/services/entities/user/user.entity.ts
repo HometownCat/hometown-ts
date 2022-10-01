@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Board } from '../board/board.entity';
+import { BoardComment } from '../board/boardComment.entity';
 import { BoardLike } from '../board/boardLike.entity';
 
 @Entity({ name: 'user' })
@@ -70,4 +71,7 @@ export class User {
 
   @OneToMany(() => BoardLike, boardLikes => boardLikes.boardId)
   boardLike: BoardLike[];
+
+  @OneToMany(() => BoardComment, boardComments => boardComments.userId)
+  boardComment: BoardComment[];
 }

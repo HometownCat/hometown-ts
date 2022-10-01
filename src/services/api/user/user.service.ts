@@ -40,6 +40,7 @@ export class UserService {
               relations: {
                 board: {
                   boardImage: true,
+                  boardComment: true,
                 },
               },
             })
