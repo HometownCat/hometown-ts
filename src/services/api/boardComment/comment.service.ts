@@ -29,12 +29,12 @@ export class CommentService {
 
   async findAll(): Promise<BoardComment[]> {
     // select * from Comment
-    const Comments = await this.commentRepository.find();
+    const comments = await this.commentRepository.find();
 
-    if (Comments === undefined)
+    if (comments === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_COMMENT);
 
-    return Comments;
+    return comments;
   }
 
   async save(createCommentDto: CreateCommentDto): Promise<BoardComment> {

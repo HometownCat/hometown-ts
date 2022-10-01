@@ -6,4 +6,7 @@ export class CreateCommentDto {
 
   @IsNumber()
   boardId: number;
+
+  @IsNumber()
+  userId: number;
 }

@@ -17,6 +17,7 @@ import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dtos/create.dto';
 import * as response from '../../../common/tools/response.tool';
 import { UpdateCommentDto } from './dtos/update.dto';
+import { v4 as uuidV4 } from 'uuid';
 
 @Controller('comment')
 export class CommentController {
@@ -26,8 +27,11 @@ export class CommentController {
   @HttpCode(200)
   async findAll(@Res() res: Response) {
     const comments = await this.commentService.findAll();
-
-    response.success(res, comments);
+    if (comments.length > 0) {
+      response.success(res, comments);
+    } else {
+      return { uuid: uuidV4(), data: [] };
+    }
   }
 
   @Post('/set')
