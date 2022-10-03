@@ -23,6 +23,9 @@ import {
   ApiTags,
   ApiOkResponse,
   ApiSecurity,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 
 @Controller('board')
@@ -46,14 +49,6 @@ export class BoardController {
     @Res() res: Response,
     @Body() createBoardDto: CreateBoardDto,
   ) {
-    // await this.boardService.getNewId(createBoardDto, err => {
-    //   if (err) {
-    //     response.error(res, err);
-    //   } else {
-    //     response.success(res, { message: 'insert success' });
-    //   }
-    // });
-
     await this.boardService.getNewId(createBoardDto);
     response.success(res, { message: 'insert success' });
   }
@@ -73,6 +68,14 @@ export class BoardController {
     response.success(res, boards);
   }
 
+  @ApiOperation({
+    summary: '한 게시글 조회',
+    description: '유저가 게시글 조회 시 사용되는 API',
+  })
+  @ApiBody({ type: BoardDto })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Post('/:id')
   @HttpCode(200)
   async findOneboard(
@@ -92,6 +95,19 @@ export class BoardController {
     // return board;
   }
 
+  @ApiOperation({
+    summary: '게시글 수정',
+    description: '유저가 게시글 수정 시 사용되는 API',
+  })
+  @ApiBody({ type: UpdateBoardDto })
+  @ApiQuery({
+    name: 'boardId',
+    required: true,
+    type: Number,
+  })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Patch('/update/:boardId')
   @HttpCode(201)
   async updateOne(
@@ -104,6 +120,18 @@ export class BoardController {
     response.success(res, { message: 'update success' });
   }
 
+  @ApiOperation({
+    summary: '게시글 삭제',
+    description: '유저가 게시글 삭제 시 사용되는 API',
+  })
+  @ApiQuery({
+    name: 'boardId',
+    required: true,
+    type: Number,
+  })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Delete('/delete/:boardId')
   @HttpCode(201)
   async deleteOne(@Res() res: Response, @Param('boardId') boardId: number) {
@@ -112,6 +140,13 @@ export class BoardController {
     response.success(res, { message: 'delete success' });
   }
 
+  @ApiOperation({
+    summary: '게시글 랭킹',
+    description: '좋아요 순으로 5등까지의 게시글 리스트 API',
+  })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Get('/ranking')
   @HttpCode(200)
   async ranking(@Res() res: Response, @Req() req: Request) {
