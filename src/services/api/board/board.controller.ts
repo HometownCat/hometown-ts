@@ -17,11 +17,28 @@ import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
 import { UpdateBoardDto } from './dtos/update.dto';
 import { BoardDto } from './dtos/board.dto';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiTags,
+  ApiOkResponse,
+  ApiSecurity,
+} from '@nestjs/swagger';
 
 @Controller('board')
+@ApiTags('게시글')
+@ApiSecurity('x-api-key')
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
+  @ApiOperation({
+    summary: '게시글 ID 생성',
+    description: '게시글 작성 클릭 시 게시글 ID 생성',
+  })
+  @ApiBody({ type: CreateBoardDto })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Post('/getNewId')
   @HttpCode(201)
   async setBoard(
@@ -41,6 +58,13 @@ export class BoardController {
     response.success(res, { message: 'insert success' });
   }
 
+  @ApiOperation({
+    summary: '게시글 리스트',
+    description: '메인 페이지에 게시글 리스트 조회',
+  })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Get('/feed')
   @HttpCode(200)
   async findAll(@Req() req: Request, @Res() res: Response) {

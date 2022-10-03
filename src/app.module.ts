@@ -67,6 +67,6 @@ dotenv.config();
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     // x-api-key validation
-    consumer.apply(ValidationMiddleware).forRoutes('*');
+    consumer.apply(ValidationMiddleware, ParamsInitMiddleware).forRoutes('*');
   }
 }

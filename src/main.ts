@@ -17,6 +17,7 @@ import * as hpp from 'hpp';
 import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
 import * as cors from 'cors';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 dotenv.config();
 
@@ -68,10 +69,29 @@ async function bootstrap() {
 
   // Filter
   app.useGlobalFilters(new CatchException());
+  const swaggerOptions = new DocumentBuilder()
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'x-api-key',
+        in: 'header',
+        description: 'API Key For External calls',
+      },
+      'x-api-key',
+    )
+    .setTitle('우리동네 킹냥이')
+    .setDescription('API 문서입니다.')
+    .setVersion('0.0.1')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, swaggerOptions);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: { defaultModelsExpandDepth: -1 },
+  });
 
   const port = process.env.PORT;
   const host = process.env.HOST;
-  await app.listen(port || 3000, host);
+  await app.listen(port || 3001, host);
 }
 
 bootstrap();

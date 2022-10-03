@@ -8,11 +8,13 @@ import * as requestIp from 'request-ip';
 export class ParamsInitMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const geo = geoIp.lookup(requestIp.getClientIp(req));
+
     if (_.has(geo, 'country')) {
       req.params.locale = geo.country;
     } else {
-      req.params.locale = undefined;
+      req.params.locale = 'localhost';
     }
+
     next();
   }
 }
