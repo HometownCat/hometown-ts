@@ -45,31 +45,31 @@ export class BoardLikeService {
               callback(err);
             });
         },
-        // (boardLikeDto: BoardLikeDto, callback: ICallback) => {
-        //   const { boardId, userId } = boardLikeDto;
-        //   let { likeStatus } = boardLikeDto;
+        (boardLikeDto: BoardLikeDto, callback: ICallback) => {
+          const { boardId, userId } = boardLikeDto;
+          let { likeStatus } = boardLikeDto;
 
-        //   if (typeof likeStatus !== 'undefined') {
-        //     callback(null, boardLikeDto);
-        //   } else {
-        //     const saveData = {
-        //       ...boardLikeDto,
-        //       likeStatus: 0,
-        //       boardId,
-        //       userId,
-        //     };
+          if (typeof likeStatus !== 'undefined') {
+            callback(null, boardLikeDto);
+          } else {
+            const saveData = {
+              ...boardLikeDto,
+              likeStatus: 0,
+              boardId,
+              userId,
+            };
 
-        //     this.boardLikeRepository
-        //       .save(saveData)
-        //       .then(() => {
-        //         likeStatus = 0;
-        //         callback(null, { boardId, userId, likeStatus });
-        //       })
-        //       .catch(err => {
-        //         callback(err);
-        //       });
-        //   }
-        // },
+            this.boardLikeRepository
+              .save(saveData)
+              .then(() => {
+                likeStatus = 0;
+                callback(null, { boardId, userId, likeStatus });
+              })
+              .catch(err => {
+                callback(err);
+              });
+          }
+        },
         (boardLikeDto: BoardLikeDto, callback: ICallback) => {
           const { likeStatus } = boardLikeDto;
 
