@@ -118,11 +118,6 @@ export class BoardService {
         user: true,
       },
     });
-    // boards = _.map(boards, board => {
-    //   const { boardLike } = board;
-    //   const like = boardLike[0];
-    //   return { ...board, boardLike: like };
-    // });
 
     if (boards === undefined)
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
@@ -204,10 +199,16 @@ export class BoardService {
     let boards = await this.boardRepository.find({
       select: {
         user: { id: true },
+        boardLike: {
+          id: true,
+          likeStatus: true,
+          user: { id: true, username: true },
+          board: { id: true },
+        },
       },
       relations: {
         boardComment: true,
-        boardLike: true,
+        boardLike: { user: true, board: true },
         boardImage: true,
         user: true,
       },
@@ -216,10 +217,46 @@ export class BoardService {
       },
       take: 5,
     });
+
     boards = _.map(boards, board => {
-      const { boardLike } = board;
-      const like = boardLike[0];
-      return { ...board, boardLike: like };
+      const {
+        boardLike,
+        boardComment,
+        boardImage,
+        user: { id: userId },
+        id,
+        title,
+        content,
+        viewCount,
+        likeCount,
+        commentCount,
+        createdAt,
+        updatedAt,
+      } = board;
+      const like = _.map(boardLike, item => {
+        const {
+          id,
+          likeStatus,
+          user: { id: userId, username },
+          board: { id: boardId },
+        } = item;
+
+        return { id, likeStatus, userId, username, boardId };
+      });
+      return {
+        id,
+        title,
+        content,
+        viewCount,
+        likeCount,
+        commentCount,
+        createdAt,
+        updatedAt,
+        userId,
+        boardComment,
+        boardImage,
+        boardLike: like,
+      };
     });
 
     if (boards === undefined)
