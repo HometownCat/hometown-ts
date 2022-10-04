@@ -37,6 +37,7 @@ export class BoardLikeService {
             .getOne()
             .then(result => {
               const returnData = { boardId, userId, ...result };
+
               callback(null, returnData);
             })
             .catch(err => {
@@ -61,9 +62,9 @@ export class BoardLikeService {
 
             this.boardLikeRepository
               .save(saveData)
-              .then(() => {
+              .then(result => {
                 likeStatus = 0;
-                callback(null, { boardId, userId, likeStatus });
+                callback(null, { boardId, userId, likeStatus, ...result });
               })
               .catch(err => {
                 callback(err);
@@ -71,7 +72,7 @@ export class BoardLikeService {
           }
         },
         (boardLikeDto: BoardLikeDto, callback: ICallback) => {
-          const { likeStatus } = boardLikeDto;
+          const { likeStatus, id } = boardLikeDto;
 
           try {
             if (likeStatus === 1) {
@@ -86,7 +87,7 @@ export class BoardLikeService {
                         },
                       })
                       .then(result => {
-                        callback(null, result);
+                        callback(null, { ...result, boardLikeId: id });
                       })
                       .catch(err => {
                         callback(err);
@@ -104,27 +105,30 @@ export class BoardLikeService {
                         .where('id = :id', { id: id })
                         .execute()
                         .then(() => {
-                          callback(null, true);
+                          callback(null, board);
                         })
                         .catch(err => {
+                          console.log(err);
+
                           callback(err);
                         });
                     } else {
                       throw new HttpError(
                         HttpStatus.NOT_FOUND,
-                        HttpMessage.NOT_FOUND_BOARD,
+                        HttpMessage.FAIL_UPDATE_LIKE,
                       );
                     }
                   },
-                  (isUpdate: boolean, callback: ICallback) => {
-                    if (isUpdate === true) {
+                  (board: BoardDto, callback: ICallback) => {
+                    const { id, boardLikeId } = board;
+                    if (board) {
                       this.boardLikeRepository
                         .createQueryBuilder('boardLike')
                         .update(BoardLike)
                         .set({
                           likeStatus: 0,
                         })
-                        .where('boardId = (:boardId)', { boardId: boardId })
+                        .where('id = (:id)', { id: boardLikeId })
                         .execute()
                         .then(() => {
                           callback(null, 'down');
@@ -132,6 +136,11 @@ export class BoardLikeService {
                         .catch(err => {
                           callback(err);
                         });
+                    } else {
+                      throw new HttpError(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.FAIL_UPDATE_LIKE,
+                      );
                     }
                   },
                 ],
@@ -149,7 +158,7 @@ export class BoardLikeService {
                         },
                       })
                       .then(result => {
-                        callback(null, result);
+                        callback(null, { ...result, boardLikeId: id });
                       })
                       .catch(err => {
                         callback(err);
@@ -157,6 +166,7 @@ export class BoardLikeService {
                   },
                   (board: BoardDto, callback: ICallback) => {
                     const { id } = board;
+
                     if (board) {
                       this.boardLikeRepository
                         .createQueryBuilder('board')
@@ -167,7 +177,7 @@ export class BoardLikeService {
                         .where('id = (:id)', { id: id })
                         .execute()
                         .then(() => {
-                          callback(null, true);
+                          callback(null, board);
                         })
                         .catch(err => {
                           callback(err);
@@ -179,15 +189,16 @@ export class BoardLikeService {
                       );
                     }
                   },
-                  (isUpdate: boolean, callback: ICallback) => {
-                    if (isUpdate === true) {
+                  (board: BoardDto, callback: ICallback) => {
+                    const { id, boardLikeId } = board;
+                    if (board) {
                       this.boardLikeRepository
                         .createQueryBuilder('boardLike')
                         .update(BoardLike)
                         .set({
                           likeStatus: 1,
                         })
-                        .where('boardId = (:boardId)', { boardId: boardId })
+                        .where('id = (:id)', { id: boardLikeId })
                         .execute()
                         .then(() => {
                           callback(null, 'up');
@@ -195,6 +206,11 @@ export class BoardLikeService {
                         .catch(err => {
                           callback(err);
                         });
+                    } else {
+                      throw new HttpError(
+                        HttpStatus.NOT_FOUND,
+                        HttpMessage.FAIL_UPDATE_LIKE,
+                      );
                     }
                   },
                 ],

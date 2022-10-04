@@ -27,4 +27,7 @@ export class BoardDto {
 
   @IsNumber()
   userId: number;
+
+  @IsNumber()
+  boardLikeId: number;
 }
