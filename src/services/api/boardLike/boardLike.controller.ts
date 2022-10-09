@@ -14,11 +14,20 @@ import {
 import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
 import { BoardLikeService } from './boardLike.service';
+import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 @Controller('boardLike')
 export class BoardLikeController {
   constructor(private readonly boardLikeService: BoardLikeService) {}
 
+  @ApiOperation({
+    summary: '게시글 좋아요',
+    description: '유저가 게시글 좋아요 클릭 시 사용되는 API',
+  })
+  @ApiBody({ type: BoardLikeDto })
+  @ApiOkResponse({
+    description: '성공',
+  })
   @Post('/alterLike')
   @HttpCode(200)
   async alterLike(

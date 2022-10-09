@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsDateString,
@@ -8,9 +9,21 @@ import {
 
 export class CreateBoardDto {
   @IsString()
+  @ApiProperty({
+    example: '게시글입니다',
+    type: String,
+    description: '게시글 제목',
+    required: true,
+  })
   title: string;
 
   @IsString()
+  @ApiProperty({
+    example: '게시글 내용입니다',
+    type: String,
+    description: '게시글 내용',
+    required: true,
+  })
   content: string;
 
   @IsNumber()
@@ -21,12 +34,6 @@ export class CreateBoardDto {
 
   @IsNumber()
   commentCount: number;
-
-  @IsDateString()
-  createdAt: Date;
-
-  @IsDateString()
-  updatedAt: Date;
 
   @IsNumber()
   userId: number;

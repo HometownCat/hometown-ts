@@ -36,7 +36,7 @@ export class BoardController {
 
   @ApiOperation({
     summary: '게시글 ID 생성',
-    description: '게시글 작성 클릭 시 게시글 ID 생성',
+    description: '게시글 작성 클릭 시 게시글 ID 생성 API',
   })
   @ApiBody({ type: CreateBoardDto })
   @ApiOkResponse({
@@ -55,7 +55,7 @@ export class BoardController {
 
   @ApiOperation({
     summary: '게시글 리스트',
-    description: '메인 페이지에 게시글 리스트 조회',
+    description: '메인 페이지에 게시글 리스트 조회 API',
   })
   @ApiOkResponse({
     description: '성공',

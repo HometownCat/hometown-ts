@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsNumber } from 'class-validator';
 
 export class BoardLikeDto {
@@ -5,6 +6,7 @@ export class BoardLikeDto {
   id: number;
 
   @IsNumber()
+  @ApiProperty({ type: Number, description: '좋아요 상태' })
   likeStatus: number;
 
   @IsDateString()
