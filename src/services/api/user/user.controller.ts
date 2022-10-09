@@ -9,8 +9,12 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
+  ApiSecurity,
+  ApiTags,
 } from '@nestjs/swagger';
 
+@ApiTags('유저')
+@ApiSecurity('x-api-key')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

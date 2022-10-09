@@ -23,8 +23,11 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
+  ApiSecurity,
+  ApiTags,
 } from '@nestjs/swagger';
-
+@ApiTags('게시글 댓글')
+@ApiSecurity('x-api-key')
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}

@@ -80,7 +80,7 @@ async function bootstrap() {
       'x-api-key',
     )
     .setTitle('우리동네 킹냥이')
-    .setDescription('API 문서입니다.')
+    .setDescription('Hometown API 문서')
     .setVersion('0.0.1')
     .build();
 

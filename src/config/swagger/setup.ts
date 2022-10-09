@@ -8,7 +8,7 @@ export function setupSwagger(app: INestApplication, config: ISwaggerConfig) {
     .setTitle(config.title)
     .setDescription(config.description)
     .setVersion(config.version)
-    .addBearerAuth()
+    // .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
@@ -16,15 +16,14 @@ export function setupSwagger(app: INestApplication, config: ISwaggerConfig) {
     swaggerOptions: {
       tagsSorter: (a: any, b: any) => {
         const tagsOrder = [
+          'user',
+          'board',
+          'boardComment',
+          'boardLike',
           'auth',
-          'users',
-          'reservations',
-          'floors',
-          'seats',
-          'rooms',
-          'facilities',
-          'questions',
-          'answers',
+          'category',
+          'ranking',
+          'vote',
         ];
         let result = tagsOrder.indexOf(a) - tagsOrder.indexOf(b);
 

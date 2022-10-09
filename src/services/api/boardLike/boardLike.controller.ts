@@ -14,8 +14,16 @@ import {
 import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
 import { BoardLikeService } from './boardLike.service';
-import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('게시글 좋아요')
+@ApiSecurity('x-api-key')
 @Controller('boardLike')
 export class BoardLikeController {
   constructor(private readonly boardLikeService: BoardLikeService) {}
