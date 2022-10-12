@@ -18,7 +18,13 @@ export class User {
   @Column({ type: 'varchar', name: 'username', length: 20, nullable: false })
   username: string;
 
-  @Column({ type: 'mediumtext', name: 'email', nullable: false })
+  @Column({
+    type: 'varchar',
+    name: 'email',
+    nullable: false,
+    length: 30,
+    unique: true,
+  })
   email: string;
 
   @Column({
