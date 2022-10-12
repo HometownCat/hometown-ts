@@ -3,7 +3,7 @@ import { User } from '../user/user.entity';
 
 @Entity({ name: 'auth' })
 export class Auth {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
   @Column({ type: 'text', name: 'accessToken', nullable: true })

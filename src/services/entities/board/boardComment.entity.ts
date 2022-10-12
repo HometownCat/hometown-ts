@@ -13,7 +13,7 @@ import { Board } from './board.entity';
 
 @Entity({ name: 'boardComment' })
 export class BoardComment {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
   @Column({ type: 'text', name: 'comment', nullable: false })

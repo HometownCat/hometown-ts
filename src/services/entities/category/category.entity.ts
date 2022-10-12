@@ -10,7 +10,7 @@ import {
 
 @Entity({ name: 'category' })
 export class Category {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
   @Column({ type: 'varchar', name: 'name', nullable: false, length: 30 })

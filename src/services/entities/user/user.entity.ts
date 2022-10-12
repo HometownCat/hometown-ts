@@ -12,7 +12,7 @@ import { BoardLike } from '../board/boardLike.entity';
 
 @Entity({ name: 'user' })
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
   @Column({ type: 'varchar', name: 'username', length: 20, nullable: false })

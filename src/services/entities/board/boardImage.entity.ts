@@ -12,7 +12,7 @@ import { Board } from './board.entity';
 
 @Entity({ name: 'boardImage' })
 export class BoardImage {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
   @Column({ type: 'text', name: 'image', nullable: true })
