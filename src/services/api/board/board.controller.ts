@@ -49,8 +49,8 @@ export class BoardController {
     @Res() res: Response,
     @Body() createBoardDto: CreateBoardDto,
   ) {
-    await this.boardService.getNewId(createBoardDto);
-    response.success(res, { message: 'insert success' });
+    const { id } = await this.boardService.getNewId(createBoardDto);
+    response.success(res, { boardId: id, message: 'insert success' });
   }
 
   @ApiOperation({
@@ -135,9 +135,9 @@ export class BoardController {
   @Delete('/delete/:boardId')
   @HttpCode(201)
   async deleteOne(@Res() res: Response, @Param('boardId') boardId: number) {
-    await this.boardService.deleteOne(boardId);
+    const { id } = await this.boardService.deleteOne(boardId);
 
-    response.success(res, { message: 'delete success' });
+    response.success(res, { boardId: id, message: 'delete success' });
   }
 
   @ApiOperation({
