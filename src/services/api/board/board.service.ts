@@ -24,13 +24,14 @@ export class BoardService {
     @Inject('BOARDLIKE_REPOSITORY')
     private boardLikeRepository: Repository<BoardLike>,
   ) {}
-  async findOne(id: number, boardDto: BoardDto, callback: ICallback) {
+  async findOne(boardId: number, boardDto: BoardDto, callback: ICallback) {
     const { userId } = boardDto;
+
     try {
       // 조회 수 증가
       async.waterfall(
         [
-          callback => callback(null, { id, userId }),
+          callback => callback(null, { id: boardId, userId }),
           (boardDto: BoardDto, callback: ICallback) => {
             const { id } = boardDto;
 
@@ -43,14 +44,16 @@ export class BoardService {
               .where('id = :id', { id: id })
               .execute()
               .then(() => {
-                callback(null, boardDto);
+                callback(null, { ...boardDto, id });
               })
               .catch(err => {
                 console.log(err);
                 callback(err);
               });
           },
-          ({ id, userId }, callback: ICallback) => {
+          (boardDto: BoardDto, callback: ICallback) => {
+            const { id, userId } = boardDto;
+
             this.boardRepository
               .createQueryBuilder('board')
               .leftJoinAndSelect('board.boardImage', 'boardImage')
@@ -66,22 +69,19 @@ export class BoardService {
                     HttpMessage.NOT_FOUND_BOARD,
                   );
 
-                const { boardLike: like, id: boardId } = result;
+                const { boardLike, id: boardId } = result;
 
-                if (like.length > 0) {
-                  const boardLike = like[0];
-                  const returnData = {
-                    ...result,
-                    boardLike: { ...boardLike, userId },
-                  };
-                  callback(null, returnData);
-                } else {
+                if (boardLike.length === 0) {
                   this.boardLikeRepository
                     .save({ boardId, userId })
                     .then(saveData => {
+                      let { boardId, userId, id } = saveData;
+                      boardId = +boardId;
+                      userId = +userId;
+                      id = +id;
                       const returnData = {
                         ...result,
-                        boardLike: { ...saveData, userId },
+                        boardLike: { ...saveData, boardId, userId, id },
                       };
                       callback(null, returnData);
                     })
@@ -90,6 +90,8 @@ export class BoardService {
 
                       callback(err);
                     });
+                } else {
+                  callback(null, result);
                 }
               })
               .catch(err => {
