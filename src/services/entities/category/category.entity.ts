@@ -1,3 +1,4 @@
+import { BoardCategory } from './../board/boardCategory.entity';
 import {
   Column,
   CreateDateColumn,
@@ -30,4 +31,7 @@ export class Category {
     default: null,
   })
   updatedAt: Date;
+
+  @OneToMany(() => BoardCategory, boardCategories => boardCategories.categoryId)
+  boardCategory: BoardCategory;
 }

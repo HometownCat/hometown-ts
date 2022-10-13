@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { BoardLike } from './boardLike.entity';
+import { BoardCategory } from './boardCategory.entity';
 
 @Entity({ name: 'board' })
 export class Board {
@@ -67,6 +68,9 @@ export class Board {
     cascade: true,
   })
   boardLike: BoardLike[];
+
+  @OneToMany(() => BoardCategory, boardCategories => boardCategories.boardId)
+  boardCategory: BoardCategory;
 
   @ManyToOne(() => User, {
     createForeignKeyConstraints: false,

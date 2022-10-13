@@ -12,7 +12,6 @@ export class CategoryController {
   @HttpCode(200)
   async findAll(@Res() res: Response) {
     const categorys = await this.categoryService.findAll();
-    // return categorys;
     response.success(res, categorys);
   }
 }
