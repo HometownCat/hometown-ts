@@ -10,6 +10,7 @@ import { BoardLikeService } from './boardLike.service';
 import { UserProviders } from '../user/user.providers';
 import { UserService } from '../user/user.service';
 import { AuthProviders } from '@Src/auth/auth.providers';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [DatabaseModule],
@@ -23,6 +24,7 @@ import { AuthProviders } from '@Src/auth/auth.providers';
     UserService,
     ...AuthProviders,
     AuthService,
+    JwtService,
   ],
   exports: [...BoardLikeProviders, BoardLikeService],
 })

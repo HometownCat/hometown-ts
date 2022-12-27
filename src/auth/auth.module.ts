@@ -9,7 +9,9 @@ import { AuthService } from './auth.service';
 import { Auth } from 'src/services/entities/auth/auth.entity';
 import { AuthProviders } from './auth.providers';
 import { GoogleStrategy } from './strategy/google.strategy';
-
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { NaverStrategy } from './strategy/naver.strategy';
+import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [TypeOrmModule.forFeature([AuthRepository]), DatabaseModule],
   controllers: [AuthController],
@@ -18,7 +20,10 @@ import { GoogleStrategy } from './strategy/google.strategy';
     AuthService,
     ...UserProviders,
     UserService,
-    GoogleStrategy,
+    JwtService,
+    // GoogleStrategy,
+    JwtStrategy,
+    // NaverStrategy,
   ],
   exports: [...AuthProviders, AuthService],
 })

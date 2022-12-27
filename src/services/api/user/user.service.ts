@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/services/entities/user/user.entity';
-import { Repository } from 'typeorm';
+import { Repository, getConnection } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -25,6 +25,26 @@ export class UserService {
     const users = await this.userRepository.find();
 
     return users;
+  }
+
+  async findUserByEmail(email: string): Promise<User | undefined> {
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where('user.email = :email', { email })
+      .getOne();
+    return user;
+  }
+
+  async findUserById(id: number): Promise<User | undefined> {
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where('user.id = :id', { id })
+      .getOne();
+    return user;
   }
 
   async findOne(userId: number, callback: ICallback) {

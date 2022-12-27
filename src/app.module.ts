@@ -19,7 +19,7 @@ import { BoardImage } from './services/entities/board/boardImage.entity';
 import { BoardComment } from './services/entities/board/boardComment.entity';
 import { APP_FILTER } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
 import { CommentModule } from './services/api/boardComment/comment.module';
 import { LikeModule } from './services/api/boardLike/boardLike.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
@@ -42,7 +42,7 @@ dotenv.config();
         database: process.env.MYSQL_DATABASE,
         synchronize: false,
         entities: [join(__dirname + '/**/*.entity{.ts,.js}')],
-        namingStrategy: new SnakeNamingStrategy(),
+        // namingStrategy: new SnakeNamingStrategy(),
         keepConnectionAlive: true,
         logging: ['error'],
         timezone: '+09:00',
