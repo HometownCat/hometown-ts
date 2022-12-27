@@ -2,7 +2,7 @@ import 'winston-daily-rotate-file';
 
 import * as dotenv from 'dotenv';
 import * as moment from 'moment';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+// import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import * as winston from 'winston';
 
 import {
@@ -62,7 +62,7 @@ export class ConfigService {
       database: this.get('MYSQL_DATABASE'),
       synchronize: false,
       entities: [__dirname + '/../**/*.entity.js'],
-      namingStrategy: new SnakeNamingStrategy(),
+      // namingStrategy: new SnakeNamingStrategy(),
       keepConnectionAlive: true,
       logging: ['error'],
       timezone: '+09:00',

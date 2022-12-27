@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { join } from 'path';
 
 export const databaseProviders = [
@@ -19,7 +18,7 @@ export const databaseProviders = [
         //   process.env.NODEMON_START === 'TRUE'
         //     ? ['src/api/entities/**/*.entity{.js,.ts}']
         //     : ['dist/api/entities/**/*.entity{.js,.ts}'],
-        namingStrategy: new SnakeNamingStrategy(),
+        // namingStrategy: new SnakeNamingStrategy(),
         logging: ['error'],
         timezone: '+09:00',
       });

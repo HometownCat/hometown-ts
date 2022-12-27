@@ -8,11 +8,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Auth } from 'src/services/entities/auth/auth.entity';
 import { AuthProviders } from './auth.providers';
+import { GoogleStrategy } from './strategy/google.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([AuthRepository]), DatabaseModule],
   controllers: [AuthController],
-  providers: [...AuthProviders, AuthService, ...UserProviders, UserService],
+  providers: [
+    ...AuthProviders,
+    AuthService,
+    ...UserProviders,
+    UserService,
+    GoogleStrategy,
+  ],
   exports: [...AuthProviders, AuthService],
 })
 export class AuthModule {}
