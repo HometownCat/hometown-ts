@@ -11,6 +11,7 @@ import { AuthProviders } from './auth.providers';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { NaverStrategy } from './strategy/naver.strategy';
+import { KaKaoStrategy } from './strategy/kakao.strategy';
 import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [TypeOrmModule.forFeature([AuthRepository]), DatabaseModule],
@@ -24,6 +25,7 @@ import { JwtService } from '@nestjs/jwt';
     // GoogleStrategy,
     // JwtStrategy,
     // NaverStrategy,
+    // KaKaoStrategy
   ],
   exports: [...AuthProviders, AuthService],
 })

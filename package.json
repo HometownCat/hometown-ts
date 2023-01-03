@@ -34,6 +34,7 @@
     "@nestjs/swagger": "^5.0.9",
     "@nestjs/typeorm": "^9.0.0",
     "@types/async": "^3.2.13",
+    "@types/passport-kakao": "^1.0.0",
     "async": "^3.2.4",
     "aws-sdk": "^2.1210.0",
     "axios": "^1.1.2",
