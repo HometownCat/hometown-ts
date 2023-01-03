@@ -22,7 +22,7 @@ import { JwtService } from '@nestjs/jwt';
     UserService,
     JwtService,
     // GoogleStrategy,
-    JwtStrategy,
+    // JwtStrategy,
     // NaverStrategy,
   ],
   exports: [...AuthProviders, AuthService],
