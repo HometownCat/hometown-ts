@@ -106,35 +106,36 @@ export class AuthService {
     userKakaoDto: UserKakaoDto,
   ): Promise<{ accessToken: string }> {
     const { kakaoId: snsId, name, email, accessToken } = userKakaoDto;
+    console.log(userKakaoDto);
 
     const user = await this.snsRepository
       .createQueryBuilder()
       .select('*')
       .from(User, 'user')
-      .where('user.snsId = :snsId', { snsId })
+      .where('user.username = :name', { name })
       .getOne();
+    console.log(user);
 
     if (!user) {
       try {
-        await this.userRepository.save(userKakaoDto);
+        await this.userRepository.save({ snsId, email, username: name });
       } catch (e) {
-        console.log(1);
-
         if (e.code === '23505') {
           throw new ConflictException('Existing User');
         } else {
           throw new InternalServerErrorException();
         }
       }
+    } else {
+      return { accessToken: null };
     }
-    console.log(accessToken);
 
-    const payload = { id: snsId, accessToken: accessToken };
+    const payload = { id: snsId, name };
     const token = await this.jwtService.sign(payload);
     await this.snsRepository.save({
       accessToken: token,
     });
 
-    return { accessToken };
+    return { accessToken: token };
   }
 }

@@ -46,7 +46,6 @@ export class AuthController {
     @Res() res,
   ): Promise<{ accessToken: string }> {
     console.log('kakao login');
-    console.log(res);
 
     return this.authService.kakaoLogin(req.user as UserKakaoDto);
   }
