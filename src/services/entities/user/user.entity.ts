@@ -15,15 +15,16 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
+  @Column({ type: 'int', name: 'snsId' })
+  snsId: number;
+
   @Column({ type: 'varchar', name: 'username', length: 20, nullable: false })
   username: string;
 
   @Column({
     type: 'varchar',
     name: 'email',
-    nullable: false,
     length: 30,
-    unique: true,
   })
   email: string;
 
@@ -45,10 +46,10 @@ export class User {
   @Column({ type: 'text', name: 'profileImage' })
   profileImage: string;
 
-  @Column({ type: 'varchar', name: 'userIp', length: 20, nullable: false })
+  @Column({ type: 'varchar', name: 'userIp', length: 20 })
   userIp: string;
 
-  @Column({ type: 'tinyint', name: 'status', nullable: false })
+  @Column({ type: 'tinyint', name: 'status' })
   status: number;
 
   @Column({
@@ -57,12 +58,6 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
-
-  @Column()
-  accessToken: string;
-
-  @Column()
-  revokeToken: string;
 
   @Column({
     type: 'timestamp',

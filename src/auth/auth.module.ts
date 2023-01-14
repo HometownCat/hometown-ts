@@ -13,6 +13,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { NaverStrategy } from './strategy/naver.strategy';
 import { KaKaoStrategy } from './strategy/kakao.strategy';
 import { JwtService } from '@nestjs/jwt';
+import { SnsProviders } from './sns.providers';
 @Module({
   imports: [TypeOrmModule.forFeature([AuthRepository]), DatabaseModule],
   controllers: [AuthController],
@@ -21,11 +22,12 @@ import { JwtService } from '@nestjs/jwt';
     AuthService,
     ...UserProviders,
     UserService,
+    ...SnsProviders,
     JwtService,
     // GoogleStrategy,
     // JwtStrategy,
     // NaverStrategy,
-    // KaKaoStrategy
+    KaKaoStrategy,
   ],
   exports: [...AuthProviders, AuthService],
 })

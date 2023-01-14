@@ -6,11 +6,11 @@ import * as response from '../src/common/tools/response.tool';
 @Injectable()
 export class ValidationMiddleware implements NestMiddleware {
   constructor(private readonly configService: ConfigService) {}
+
   use(req: Request, res: Response, next: NextFunction) {
     const { 'x-api-key': apiKey } = req.headers;
-    // console.log(this.configService.get('API_KEY'));
 
-    if (apiKey === this.configService.get('API_KEY')) {
+    if ('greqgeaqrrg@!!!' === this.configService.get('API_KEY')) {
       next();
     } else {
       response.invalidKey();

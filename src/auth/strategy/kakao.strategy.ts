@@ -1,7 +1,15 @@
+import { Injectable } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+import { HttpMessage } from '@Src/auth/enum/httpMessage.enum';
+import { ConfigService } from '@Src/config/config.service';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-kakao';
+import * as path from 'path';
+
+dotenv.config();
+
 export class KaKaoStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(configService: ConfigService) {
     super({
       clientID: process.env.KAKAO_CLIENT_ID,
       clientSecret: process.env.KAKAO_CLIENT_SECRET,

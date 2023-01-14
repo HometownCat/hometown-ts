@@ -1,5 +1,10 @@
 import { AuthRepository } from './auth.repository';
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Auth } from 'src/services/entities/auth/auth.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@Src/services/entities/user/user.entity';
@@ -7,6 +12,8 @@ import { Repository } from 'typeorm';
 import { UserService } from '@Src/services/api/user/user.service';
 import CryptoJS from 'crypto-js';
 import { JwtService } from '@nestjs/jwt';
+import { UserKakaoDto } from './dto/user.kakao.dto';
+import { SnsToken } from '@Src/services/entities/auth/sns.entity';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +21,10 @@ export class AuthService {
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
     @Inject('AUTH_REPOSITORY')
-    private authRepository: Repository<User>,
+    private authRepository: Repository<Auth>,
+    @Inject('SNS_REPOSITORY')
+    private snsRepository: Repository<SnsToken>,
+
     private jwtService: JwtService,
   ) {}
   // async findAll(): Promise<Auth[]> {
@@ -65,9 +75,9 @@ export class AuthService {
 
     await this.userRepository
       .createQueryBuilder()
-      .update(User)
+      .update(SnsToken)
       .set({ revokeToken: token })
-      .where(`user_no = ${user.id}`)
+      .where(`snsId = ${user.id}`)
       .execute();
     return refresh_token;
   }
@@ -90,5 +100,41 @@ export class AuthService {
     return await this.jwtService.verify(token, {
       secret: process.env.JWT_SECRET,
     });
+  }
+
+  async kakaoLogin(
+    userKakaoDto: UserKakaoDto,
+  ): Promise<{ accessToken: string }> {
+    const { kakaoId: snsId, name, email, accessToken } = userKakaoDto;
+
+    const user = await this.snsRepository
+      .createQueryBuilder()
+      .select('*')
+      .from(User, 'user')
+      .where('user.snsId = :snsId', { snsId })
+      .getOne();
+
+    if (!user) {
+      try {
+        await this.userRepository.save(userKakaoDto);
+      } catch (e) {
+        console.log(1);
+
+        if (e.code === '23505') {
+          throw new ConflictException('Existing User');
+        } else {
+          throw new InternalServerErrorException();
+        }
+      }
+    }
+    console.log(accessToken);
+
+    const payload = { id: snsId, accessToken: accessToken };
+    const token = await this.jwtService.sign(payload);
+    await this.snsRepository.save({
+      accessToken: token,
+    });
+
+    return { accessToken };
   }
 }

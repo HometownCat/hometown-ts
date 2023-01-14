@@ -14,6 +14,7 @@ import { UserService } from '../user/user.service';
 import { AuthProviders } from '@Src/auth/auth.providers';
 import { AuthService } from '@Src/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
+import { SnsProviders } from '@Src/auth/sns.providers';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CommentRepository]), DatabaseModule],
@@ -29,6 +30,7 @@ import { JwtService } from '@nestjs/jwt';
     UserService,
     ...AuthProviders,
     AuthService,
+    ...SnsProviders,
     JwtService,
   ],
   exports: [...CommentProviders, CommentService],

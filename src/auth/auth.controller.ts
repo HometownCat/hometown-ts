@@ -1,7 +1,8 @@
 import { Controller, Get, HttpCode, Req, Res, UseGuards } from '@nestjs/common';
-import { Auth } from 'src/services/entities/auth/auth.entity';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
+import { UserKakaoDto } from './dto/user.kakao.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +31,23 @@ export class AuthController {
         `${process.env.HOST}:${process.env.PORT}/login/success/` + jwt,
       );
     else res.redirect(`${process.env.HOST}:${process.env.PORT}/login/failure`);
+  }
+
+  @Get('kakao')
+  @UseGuards(AuthGuard('kakao'))
+  async kakaoLogin(): Promise<any> {
+    // do nothing
+  }
+
+  @Get('kakao/callback')
+  @UseGuards(AuthGuard('kakao'))
+  async kakaoLoginCallback(
+    @Req() req,
+    @Res() res,
+  ): Promise<{ accessToken: string }> {
+    console.log('kakao login');
+    console.log(res);
+
+    return this.authService.kakaoLogin(req.user as UserKakaoDto);
   }
 }

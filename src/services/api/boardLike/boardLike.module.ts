@@ -11,6 +11,7 @@ import { UserProviders } from '../user/user.providers';
 import { UserService } from '../user/user.service';
 import { AuthProviders } from '@Src/auth/auth.providers';
 import { JwtService } from '@nestjs/jwt';
+import { SnsProviders } from '@Src/auth/sns.providers';
 
 @Module({
   imports: [DatabaseModule],
@@ -24,6 +25,7 @@ import { JwtService } from '@nestjs/jwt';
     UserService,
     ...AuthProviders,
     AuthService,
+    ...SnsProviders,
     JwtService,
   ],
   exports: [...BoardLikeProviders, BoardLikeService],
