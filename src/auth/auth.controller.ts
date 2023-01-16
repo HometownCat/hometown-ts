@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { UserKakaoDto } from './dto/user.kakao.dto';
+import * as response from '../common/tools/response.tool';
 
 @Controller('auth')
 export class AuthController {
@@ -41,12 +42,13 @@ export class AuthController {
 
   @Get('kakao/callback')
   @UseGuards(AuthGuard('kakao'))
-  async kakaoLoginCallback(
-    @Req() req: Request,
-    @Res() res: Response,
-  ): Promise<UserKakaoDto> {
+  async kakaoLoginCallback(@Req() req: Request, @Res() res: Response) {
     console.log('kakao login');
 
-    return this.authService.kakaoLogin(req.user as UserKakaoDto);
+    const kakaoResponse = await this.authService.kakaoLogin(
+      req.user as UserKakaoDto,
+    );
+
+    response.success(res, kakaoResponse);
   }
 }
