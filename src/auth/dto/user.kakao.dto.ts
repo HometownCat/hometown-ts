@@ -9,6 +9,10 @@ import {
 export class UserKakaoDto {
   @IsString()
   @IsNotEmpty()
+  provider: string;
+
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsOptional()
@@ -26,4 +30,8 @@ export class UserKakaoDto {
   @IsString()
   @IsNotEmpty()
   refreshToken: string;
+
+  @IsString()
+  @IsNotEmpty()
+  gender: string;
 }

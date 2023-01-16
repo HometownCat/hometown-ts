@@ -102,17 +102,16 @@ export class AuthService {
     });
   }
 
-  async kakaoLogin(
-    userKakaoDto: UserKakaoDto,
-  ): Promise<{ accessToken: string }> {
+  async kakaoLogin(userKakaoDto: UserKakaoDto): Promise<UserKakaoDto> {
     const {
-      kakaoId: snsId,
+      provider,
+      kakaoId,
       name,
       email,
       accessToken,
       refreshToken,
+      gender,
     } = userKakaoDto;
-    console.log(userKakaoDto);
 
     const user = await this.snsRepository
       .createQueryBuilder()
@@ -120,16 +119,13 @@ export class AuthService {
       .from(User, 'user')
       .where('user.username = :name', { name })
       .getOne();
-    console.log(user);
 
     if (!user) {
       try {
         await this.userRepository.save({
-          snsId,
+          snsId: kakaoId,
           email,
           username: name,
-          accessToken,
-          revokeToken: refreshToken,
         });
       } catch (e) {
         if (e.code === '23505') {
@@ -139,15 +135,32 @@ export class AuthService {
         }
       }
     } else {
-      return { accessToken: null };
+      return {
+        provider,
+        name,
+        email,
+        kakaoId,
+        accessToken,
+        refreshToken,
+        gender,
+      };
     }
-
-    const payload = { id: snsId, accessToken, name };
-    const token = await this.jwtService.sign(payload);
     await this.snsRepository.save({
-      accessToken: token,
+      snsId: kakaoId,
+      accessToken,
+      revokeToken: refreshToken,
     });
 
-    return { accessToken: token };
+    // console.log(
+    //   provider,
+    //   name,
+    //   email,
+    //   kakaoId,
+    //   accessToken,
+    //   refreshToken,
+    //   gender,
+    // );
+
+    return userKakaoDto;
   }
 }

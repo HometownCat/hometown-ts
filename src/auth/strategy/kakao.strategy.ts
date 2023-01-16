@@ -17,12 +17,12 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(accessToken, refreshToken, profile, done) {
-    console.log(refreshToken);
-
+  async validate(accessToken, refreshToken, profile, provider, done) {
     const profileJson = profile._json;
     const kakaoAccount = profileJson.kakao_account;
+
     const payload = {
+      provider,
       name: kakaoAccount.profile.nickname,
       kakaoId: profileJson.id,
       email:
@@ -31,7 +31,9 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
           : null,
       accessToken,
       refreshToken,
+      gender: kakaoAccount.gender,
     };
+
     done(null, payload);
   }
 }

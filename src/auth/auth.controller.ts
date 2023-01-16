@@ -42,9 +42,9 @@ export class AuthController {
   @Get('kakao/callback')
   @UseGuards(AuthGuard('kakao'))
   async kakaoLoginCallback(
-    @Req() req,
-    @Res() res,
-  ): Promise<{ accessToken: string }> {
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<UserKakaoDto> {
     console.log('kakao login');
 
     return this.authService.kakaoLogin(req.user as UserKakaoDto);
