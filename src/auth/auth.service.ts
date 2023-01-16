@@ -105,7 +105,13 @@ export class AuthService {
   async kakaoLogin(
     userKakaoDto: UserKakaoDto,
   ): Promise<{ accessToken: string }> {
-    const { kakaoId: snsId, name, email, accessToken } = userKakaoDto;
+    const {
+      kakaoId: snsId,
+      name,
+      email,
+      accessToken,
+      refreshToken,
+    } = userKakaoDto;
     console.log(userKakaoDto);
 
     const user = await this.snsRepository
@@ -118,7 +124,13 @@ export class AuthService {
 
     if (!user) {
       try {
-        await this.userRepository.save({ snsId, email, username: name });
+        await this.userRepository.save({
+          snsId,
+          email,
+          username: name,
+          accessToken,
+          revokeToken: refreshToken,
+        });
       } catch (e) {
         if (e.code === '23505') {
           throw new ConflictException('Existing User');
@@ -130,7 +142,7 @@ export class AuthService {
       return { accessToken: null };
     }
 
-    const payload = { id: snsId, name };
+    const payload = { id: snsId, accessToken, name };
     const token = await this.jwtService.sign(payload);
     await this.snsRepository.save({
       accessToken: token,

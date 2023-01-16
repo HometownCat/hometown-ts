@@ -22,4 +22,8 @@ export class UserKakaoDto {
   @IsString()
   @IsNotEmpty()
   accessToken: string;
+
+  @IsString()
+  @IsNotEmpty()
+  refreshToken: string;
 }

@@ -18,6 +18,8 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(accessToken, refreshToken, profile, done) {
+    console.log(refreshToken);
+
     const profileJson = profile._json;
     const kakaoAccount = profileJson.kakao_account;
     const payload = {
@@ -27,6 +29,8 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
         kakaoAccount.has_email && !kakaoAccount.email_needs_agreement
           ? kakaoAccount.email
           : null,
+      accessToken,
+      refreshToken,
     };
     done(null, payload);
   }
