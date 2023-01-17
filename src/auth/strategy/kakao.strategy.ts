@@ -33,7 +33,7 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
       refreshToken,
       gender: kakaoAccount.gender,
     };
-
-    done(null, payload);
+    return payload;
+    // done(null, payload);
   }
 }
