@@ -34,4 +34,8 @@ export class UserKakaoDto {
   @IsString()
   @IsNotEmpty()
   gender: string;
+
+  @IsString()
+  @IsNotEmpty()
+  code: string;
 }

@@ -111,6 +111,7 @@ export class AuthService {
       accessToken,
       refreshToken,
       gender,
+      code,
     } = userKakaoDto;
 
     const user = await this.snsRepository
@@ -143,6 +144,7 @@ export class AuthService {
         accessToken,
         refreshToken,
         gender,
+        code,
       };
     }
     await this.snsRepository.save({
