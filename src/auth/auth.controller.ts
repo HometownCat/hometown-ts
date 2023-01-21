@@ -63,4 +63,20 @@ export class AuthController {
 
     response.success(res, { ...kakaoResponse, code });
   }
+
+  @Get('naver')
+  @UseGuards(AuthGuard('naver'))
+  async naverLogin(): Promise<any> {
+    // do nothing
+  }
+
+  @Get('naver/callback')
+  @UseGuards(AuthGuard('naver'))
+  async naverLoginCallback(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query() query,
+  ) {
+    console.log('naver login');
+  }
 }
