@@ -44,6 +44,7 @@ export class AuthService {
       .from(User, 'user')
       .where('user.snsId = :snsId', { snsId: naverId })
       .andWhere('user.email = :email', { email })
+      // .printSql();
       .getOne();
 
     if (!user) {
@@ -183,13 +184,6 @@ export class AuthService {
       };
     }
     try {
-      console.log({
-        snsId: kakaoId,
-        provider: provider,
-        accessToken,
-        revokeToken,
-      });
-
       await this.snsRepository
         .createQueryBuilder()
         .insert()

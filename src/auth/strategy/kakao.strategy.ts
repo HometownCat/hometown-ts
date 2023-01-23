@@ -30,7 +30,6 @@ export class KaKaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       revokeToken: refreshToken,
       gender: kakaoAccount.gender,
     };
-    console.log(payload);
 
     return payload;
     // done(null, payload);

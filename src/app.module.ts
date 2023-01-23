@@ -25,6 +25,7 @@ import { LikeModule } from './services/api/boardLike/boardLike.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { LoggerModule } from './common/utils/logger/logger.module';
 import { ValidationMiddleware } from 'middlewares/validation.middleware';
+import { DatabaseModule } from './database/database.module';
 
 dotenv.config();
 
@@ -44,10 +45,11 @@ dotenv.config();
         entities: [join(__dirname + '/**/*.entity{.ts,.js}')],
         // namingStrategy: new SnakeNamingStrategy(),
         keepConnectionAlive: true,
-        logging: ['error'],
+        logging: true,
         timezone: '+09:00',
       }),
     }),
+    // DatabaseModule,
     UserModule,
     BoardModule,
     LikeModule,
