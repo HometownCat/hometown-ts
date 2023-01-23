@@ -15,8 +15,8 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
   id: number;
 
-  @Column({ type: 'int', name: 'snsId' })
-  snsId: number;
+  @Column({ type: 'varchar', name: 'snsId' })
+  snsId: string;
 
   @Column({ type: 'varchar', name: 'username', length: 20, nullable: false })
   username: string;

@@ -26,7 +26,7 @@ import { SnsProviders } from './sns.providers';
     JwtService,
     // GoogleStrategy,
     // JwtStrategy,
-    // NaverStrategy,
+    NaverStrategy,
     KaKaoStrategy,
   ],
   exports: [...AuthProviders, AuthService],

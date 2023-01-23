@@ -1,9 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity({ name: 'snsToken' })
-export class SnsToken {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'snsId' })
-  snsId: number;
+@Entity({ name: 'userSns' })
+export class UserSns {
+  @PrimaryColumn({ type: 'varchar', name: 'snsId' })
+  snsId: string;
+
+  @Column({ type: 'varchar', name: 'provider', nullable: false })
+  provider: string;
 
   @Column({ type: 'text', name: 'accessToken', nullable: true })
   accessToken: string;

@@ -12,6 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { UserKakaoDto } from './dto/user.kakao.dto';
 import * as response from '../common/tools/response.tool';
+import { UserNaverDto } from './dto/user.naver.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -78,5 +79,26 @@ export class AuthController {
     @Query() query,
   ) {
     console.log('naver login');
+    const { code } = query;
+
+    const user = await this.authService.naverValidateUser(
+      req.user as UserNaverDto,
+    );
+    console.log(user);
+
+    if (user === null) {
+      // 유저가 없을때
+      console.log('일회용 토큰 발급');
+      const accessToken = this.authService.onceToken(req.user as UserNaverDto);
+      return { ...user, accessToken };
+    }
+
+    const { naverId } = user;
+
+    // 유저가 있을때
+    console.log('로그인 토큰 발급');
+    const accessToken = await this.authService.createLoginToken(naverId);
+    const revokeToken = await this.authService.createRefreshToken(naverId);
+    return { ...user, code, accessToken, revokeToken };
   }
 }

@@ -3,10 +3,11 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPhoneNumber,
   IsString,
 } from 'class-validator';
 
-export class UserKakaoDto {
+export class UserNaverDto {
   @IsString()
   @IsNotEmpty()
   provider: string;
@@ -21,7 +22,7 @@ export class UserKakaoDto {
 
   @IsString()
   @IsNotEmpty()
-  kakaoId: string;
+  naverId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -30,10 +31,6 @@ export class UserKakaoDto {
   @IsString()
   @IsNotEmpty()
   revokeToken: string;
-
-  @IsString()
-  @IsNotEmpty()
-  gender: string;
 
   @IsString()
   @IsNotEmpty()

@@ -13,7 +13,9 @@ import { UserService } from '@Src/services/api/user/user.service';
 import CryptoJS from 'crypto-js';
 import { JwtService } from '@nestjs/jwt';
 import { UserKakaoDto } from './dto/user.kakao.dto';
-import { SnsToken } from '@Src/services/entities/auth/sns.entity';
+import { UserSns } from '@Src/services/entities/auth/sns.entity';
+import { UserNaverDto } from './dto/user.naver.dto';
+import HttpError from '@Src/common/exceptions/http.exception';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +25,7 @@ export class AuthService {
     @Inject('AUTH_REPOSITORY')
     private authRepository: Repository<Auth>,
     @Inject('SNS_REPOSITORY')
-    private snsRepository: Repository<SnsToken>,
+    private snsRepository: Repository<UserSns>,
 
     private jwtService: JwtService,
   ) {}
@@ -32,22 +34,57 @@ export class AuthService {
   //   return auth;
   // }
 
-  async validateUser(email: string): Promise<any> {
-    const user = await this.userRepository
+  async naverValidateUser(userNaverDto: UserNaverDto): Promise<UserNaverDto> {
+    const { provider, naverId, name, email, accessToken, revokeToken } =
+      userNaverDto;
+
+    const user = await this.snsRepository
       .createQueryBuilder()
-      .select('user')
+      .select('*')
       .from(User, 'user')
-      .where('user.email = :email', { email })
+      .where('user.snsId = :snsId', { snsId: naverId })
+      .andWhere('user.email = :email', { email })
       .getOne();
+
     if (!user) {
-      return null;
+      try {
+        Promise.all([
+          await this.userRepository
+            .createQueryBuilder()
+            .insert()
+            .into(User)
+            .values({
+              snsId: naverId,
+              email,
+              username: name,
+            })
+            .orUpdate(['email', 'username'])
+            .execute(),
+          await this.snsRepository
+            .createQueryBuilder()
+            .insert()
+            .into(UserSns)
+            .values({
+              snsId: naverId,
+              provider,
+              accessToken,
+              revokeToken,
+            })
+            .orUpdate(['provider', 'accessToken', 'revokeToken'])
+            .execute(),
+        ]);
+
+        return null;
+      } catch (e) {
+        throw new InternalServerErrorException();
+      }
     }
-    return user;
+    return userNaverDto;
   }
 
-  async createLoginToken(user: User) {
+  async createLoginToken(snsId: string) {
     const payload = {
-      user_no: user.id,
+      snsId,
       user_token: 'loginToken',
     };
 
@@ -57,9 +94,9 @@ export class AuthService {
     });
   }
 
-  async createRefreshToken(user: User) {
+  async createRefreshToken(snsId: string) {
     const payload = {
-      user_no: user.id,
+      snsId,
       user_token: 'refreshToken',
     };
 
@@ -75,19 +112,17 @@ export class AuthService {
 
     await this.userRepository
       .createQueryBuilder()
-      .update(SnsToken)
+      .update(UserSns)
       .set({ revokeToken: token })
-      .where(`snsId = ${user.id}`)
+      .where(`snsId = ${snsId}`)
       .execute();
     return refresh_token;
   }
 
-  onceToken(user_profile: any) {
+  onceToken({ email, name }) {
     const payload = {
-      user_email: user_profile.user_email,
-      user_nick: user_profile.user_nick,
-      user_provider: user_profile.user_provider,
-      user_token: 'onceToken',
+      email,
+      name,
     };
 
     return this.jwtService.sign(payload, {
@@ -109,7 +144,7 @@ export class AuthService {
       name,
       email,
       accessToken,
-      refreshToken,
+      revokeToken,
       gender,
       code,
     } = userKakaoDto;
@@ -118,7 +153,7 @@ export class AuthService {
       .createQueryBuilder()
       .select('*')
       .from(User, 'user')
-      .where('user.username = :name', { name })
+      .where('user.snsId = :snsId', { snsId: kakaoId })
       .getOne();
 
     if (!user) {
@@ -142,17 +177,34 @@ export class AuthService {
         email,
         kakaoId,
         accessToken,
-        refreshToken,
+        revokeToken,
         gender,
         code,
       };
     }
-    await this.snsRepository.save({
-      snsId: kakaoId,
-      accessToken,
-      revokeToken: refreshToken,
-    });
+    try {
+      console.log({
+        snsId: kakaoId,
+        provider: provider,
+        accessToken,
+        revokeToken,
+      });
 
+      await this.snsRepository
+        .createQueryBuilder()
+        .insert()
+        .into(UserSns)
+        .values({
+          snsId: kakaoId,
+          provider: provider,
+          accessToken,
+          revokeToken,
+        })
+        .orUpdate(['provider', 'accessToken', 'revokeToken'])
+        .execute();
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
     // console.log(
     //   provider,
     //   name,

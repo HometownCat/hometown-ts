@@ -1,14 +1,11 @@
-import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import { HttpMessage } from '@Src/auth/enum/httpMessage.enum';
 import { ConfigService } from '@Src/config/config.service';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-kakao';
-import * as path from 'path';
 
 dotenv.config();
 
-export class KaKaoStrategy extends PassportStrategy(Strategy) {
+export class KaKaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor(configService: ConfigService) {
     super({
       clientID: process.env.KAKAO_CLIENT_ID,
@@ -17,12 +14,12 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(accessToken, refreshToken, profile, provider, done) {
+  async validate(accessToken, refreshToken, profile, done) {
     const profileJson = profile._json;
     const kakaoAccount = profileJson.kakao_account;
 
     const payload = {
-      provider,
+      provider: profile.provider,
       name: kakaoAccount.profile.nickname,
       kakaoId: profileJson.id,
       email:
@@ -30,9 +27,11 @@ export class KaKaoStrategy extends PassportStrategy(Strategy) {
           ? kakaoAccount.email
           : null,
       accessToken,
-      refreshToken,
+      revokeToken: refreshToken,
       gender: kakaoAccount.gender,
     };
+    console.log(payload);
+
     return payload;
     // done(null, payload);
   }
