@@ -2,12 +2,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import { HttpMessage } from '@Src/auth/enum/httpMessage.enum';
+import { HttpAuthMessage } from '@Src/auth/enum/httpMessage.enum';
 import { ConfigService } from '@Src/config/config.service';
 
 dotenv.config();
 
-@Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(configService: ConfigService) {
     super({
@@ -31,7 +30,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const method = 'google.com';
 
     if (!provider) {
-      return new Error(HttpMessage.NOT_FOUND_PROVIDER);
+      return new Error(HttpAuthMessage.NOT_FOUND_PROVIDER);
     } else {
       return {
         provider,

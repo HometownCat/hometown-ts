@@ -1,4 +1,4 @@
-export enum HttpMessage {
+export enum HttpAuthMessage {
   BAD_REQUEST = 'bad request',
   NOT_FOUND_USER = 'Not found user',
   NOT_FOUND_PROVIDER = 'Not found provider',

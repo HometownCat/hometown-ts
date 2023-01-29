@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import { BoardDto } from './dtos/board.dto';
 import { BoardLike } from '@Src/services/entities/board/boardLike.entity';
 import { BoardRepository } from './board.repository';
+import { BoardLikeRepository } from '../boardLike/boardLike.repository';
 
 @Injectable()
 export class BoardService {
@@ -18,14 +19,25 @@ export class BoardService {
   constructor(
     // @Inject('BOARD_REPOSITORY')
     private boardRepository: BoardRepository,
-    @Inject('BOARDLIKE_REPOSITORY')
-    private boardLikeRepository: Repository<BoardLike>,
+    private boardLikeRepository: BoardLikeRepository, // @Inject('BOARDLIKE_REPOSITORY') // private boardLikeRepository: Repository<BoardLike>,
   ) {}
   async findOne(boardId: number, boardDto: BoardDto) {
     const { userId } = boardDto;
 
     try {
       await this.boardRepository.viewCountIncrease(boardId);
+      const board = await this.boardRepository.getOneById(boardId, userId);
+      if (board === null) {
+        throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
+      } else {
+        const { boardLike, id: boardId } = board;
+        if (boardLike.length === 0) {
+          await this.boardLikeRepository.likeInit(boardId, userId);
+          return board;
+        } else {
+          return board;
+        }
+      }
     } catch (err) {
       throw new HttpError(HttpStatus.NOT_FOUND, HttpMessage.NOT_FOUND_BOARD);
     }
