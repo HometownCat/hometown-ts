@@ -81,13 +81,7 @@ export class BoardController {
     @Param('id') boardId: number,
     @Body() boardDto: BoardDto,
   ) {
-    await this.boardService.findOne(boardId, boardDto, (err, result) => {
-      if (err) {
-        response.error(res, err);
-      } else {
-        response.success(res, result);
-      }
-    });
+    return await this.boardService.findOne(boardId, boardDto);
     // const data: Board = { ...board };
     // return board;
   }

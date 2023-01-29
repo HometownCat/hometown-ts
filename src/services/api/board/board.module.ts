@@ -32,6 +32,7 @@ import { SnsProviders } from '@Src/auth/sns.providers';
     AuthService,
     ...SnsProviders,
     JwtService,
+    BoardRepository,
   ],
   exports: [...BoardProviders, BoardService],
 })
