@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-} from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateBoardDto {
   @IsString()

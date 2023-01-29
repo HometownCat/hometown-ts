@@ -1,13 +1,5 @@
 import { BoardCategory } from './../board/boardCategory.entity';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'category' })
 export class Category {

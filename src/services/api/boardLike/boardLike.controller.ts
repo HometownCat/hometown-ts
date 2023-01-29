@@ -1,16 +1,5 @@
 import { BoardLikeDto } from './dtos/boardLike.dto';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  Param,
-  Patch,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
 import { BoardLikeService } from './boardLike.service';

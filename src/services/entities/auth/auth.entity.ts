@@ -1,5 +1,4 @@
-import { Column, Entity, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../user/user.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'auth' })
 export class Auth {

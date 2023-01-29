@@ -7,7 +7,6 @@ import HttpError from '@Src/common/exceptions/http.exception';
 import { HttpMessage } from '@Src/common/utils/errors/http-message.enum';
 import { ICallback } from '@Src/interfaces/common/common.interface';
 import * as async from 'async';
-import * as _ from 'lodash';
 import { Board } from '@Src/services/entities/board/board.entity';
 import { User } from '@Src/services/entities/user/user.entity';
 @Injectable()

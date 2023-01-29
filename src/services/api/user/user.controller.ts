@@ -1,11 +1,9 @@
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { User } from 'src/services/entities/user/user.entity';
 import { UserService } from './user.service';
 import * as response from '../../../common/tools/response.tool';
 import { CreateUserDto } from './dtos/create.dto';
 import {
-  ApiBody,
   ApiOkResponse,
   ApiOperation,
   ApiQuery,

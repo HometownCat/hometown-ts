@@ -5,17 +5,12 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 import CatchException from './common/filters/http-exception.filter';
-import { LoggerService } from './common/utils/logger/logger.service';
-import { ConfigModule } from './config/config.module';
-import { ConfigService } from './config/config.service';
-import { setupSwagger } from './config/swagger/setup';
 import * as compression from 'compression';
 import * as requestIp from 'request-ip';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as hpp from 'hpp';
 import * as dotenv from 'dotenv';
-import * as helmet from 'helmet';
 import * as cors from 'cors';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 

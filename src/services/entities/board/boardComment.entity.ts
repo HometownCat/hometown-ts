@@ -1,12 +1,9 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Board } from './board.entity';

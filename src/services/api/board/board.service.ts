@@ -1,13 +1,9 @@
-import { BoardLikeDto } from './../boardLike/dtos/boardLike.dto';
 import { ICallback } from '@Src/interfaces/common/common.interface';
-import { User } from 'src/services/entities/user/user.entity';
 import { UpdateBoardDto } from './dtos/update.dto';
-import { BoardRepository } from './board.repository';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import HttpError from 'src/common/exceptions/http.exception';
 import { CreateBoardDto } from './dtos/create.dto';
 import { HttpMessage } from 'src/common/utils/errors/http-message.enum';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Board } from 'src/services/entities/board/board.entity';
 import { Repository } from 'typeorm';
 import * as async from 'async';

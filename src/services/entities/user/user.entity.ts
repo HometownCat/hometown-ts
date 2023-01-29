@@ -1,11 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Board } from '../board/board.entity';
 import { BoardComment } from '../board/boardComment.entity';
 import { BoardLike } from '../board/boardLike.entity';

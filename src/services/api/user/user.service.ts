@@ -1,16 +1,13 @@
 import { ICallback } from './../../../interfaces/common/common.interface';
 import { CreateUserDto } from './dtos/create.dto';
 import * as bcrypt from 'bcrypt';
-import HttpError from 'src/common/exceptions/http.exception';
 import * as uuid from 'uuid';
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as async from 'async';
 import * as _ from 'lodash';
 // import { CreateUserDto } from './dtos/create-user.dto';
-import { UserRepository } from './user.repository';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/services/entities/user/user.entity';
-import { Repository, getConnection } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {

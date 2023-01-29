@@ -1,4 +1,3 @@
-import { InjectRepository } from '@nestjs/typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { Category } from 'src/services/entities/category/category.entity';
 import { Repository } from 'typeorm';

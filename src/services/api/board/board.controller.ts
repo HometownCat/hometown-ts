@@ -12,7 +12,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
-import { Board } from 'src/services/entities/board/board.entity';
 import * as response from '../../../common/tools/response.tool';
 import { Response, Request } from 'express';
 import { UpdateBoardDto } from './dtos/update.dto';
@@ -23,8 +22,6 @@ import {
   ApiTags,
   ApiOkResponse,
   ApiSecurity,
-  ApiResponse,
-  ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
 

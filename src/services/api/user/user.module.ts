@@ -2,7 +2,6 @@ import { BoardProviders } from './../board/board.providers';
 import { DatabaseModule } from '../../../database/database.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/services/entities/user/user.entity';
 
 import { UserController } from './user.controller';
 import { UserProviders } from './user.providers';

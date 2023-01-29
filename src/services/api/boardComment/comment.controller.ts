@@ -8,10 +8,8 @@ import {
   Param,
   Patch,
   Post,
-  Req,
   Res,
 } from '@nestjs/common';
-import { BoardComment } from '@Src/services/entities/board/boardComment.entity';
 import { Response } from 'express';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dtos/create.dto';
